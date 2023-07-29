@@ -64,7 +64,6 @@ const authController = {
     }
   },
 
-
   resetPassword: async (req, res) => {
     const { id } = req.user;
     const { password, confirmPassword } = req.body;
@@ -80,7 +79,8 @@ const authController = {
       return res.status(200).json({ message: "Password berhasil diubah" });
     } catch (err) {
       return res.status(500).json({ message: err.message });
-
+    }
+  },
 
   register: async (req, res) => {
     try {
@@ -100,7 +100,6 @@ const authController = {
         .json({ success: "register berhasil", createkasir });
     } catch (error) {
       return res.status(500).json({ message: error.message });
-
     }
   },
 };
