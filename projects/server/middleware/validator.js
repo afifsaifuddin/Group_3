@@ -1,15 +1,14 @@
 const { body, validationResult } = require("express-validator");
 
 const loginValidator = [
-  body("username").isEmpty().withMessage("Username harus diisi"),
-  body("password").isEmpty().withMessage("Password harus diisi"),
+  body("username").notEmpty().withMessage("Username harus diisi"),
   body("password")
+    .notEmpty()
+    .withMessage("Password harus diisi")
     .isLength({ min: 6 })
-    .withMessage("Password minimal 6 karakter"),
-  body("password")
+    .withMessage("Password minimal 6 karakter")
     .matches(/[!@#$%^&*()\-_=+{};:'",.<>?]/)
-    .withMessage("password harus mengandung karakter"),
-  body("password")
+    .withMessage("password harus mengandung karakter")
     .matches(/[A-Z]/)
     .withMessage("password harus mengandung huruf kapital"),
 ];
