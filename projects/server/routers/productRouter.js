@@ -21,6 +21,7 @@ router.post(
 
 router.patch(
   "/updateProduk/:id",
+  multerUpload.single("productImg"),
   verifyToken,
   cekRole,
   productController.updateProduk
