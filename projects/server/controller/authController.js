@@ -52,7 +52,7 @@ const authController = {
     try {
       const { email } = req.body;
       const cekUser = await user.findOne({
-        where: { email: email },
+        where: { email },
       });
       if (!cekUser) {
         return res.status(500).json({ message: "Email tidak ditemukan!" });
@@ -63,6 +63,8 @@ const authController = {
       return res.status(500).json({ message: error.message });
     }
   },
+
+  resetPassword: async (req, res) => {},
 };
 
 module.exports = authController;
