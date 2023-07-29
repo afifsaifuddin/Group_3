@@ -22,4 +22,11 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-module.exports = { verifyToken };
+const cekRole = async (req, res, next) => {
+  if (req.user.role != "admin")
+    return res.status(200).json({ message: "forbidden" });
+
+  next();
+};
+
+module.exports = { verifyToken, cekRole };
