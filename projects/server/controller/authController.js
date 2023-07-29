@@ -65,6 +65,27 @@ const authController = {
   },
 
   resetPassword: async (req, res) => {},
+
+  register: async (req, res) => {
+    try {
+      const { username, email, phone, password, confirmpassword } = req.body;
+      const createkasir = await user.create({
+        username,
+        email,
+        phone,
+        password,
+        confirmpassword,
+      });
+      if (password !== confirmpassword) {
+        return res.status(400).json({ error: "Password tidak sama" });
+      }
+      return res
+        .status(200)
+        .json({ success: "register berhasil", createkasir });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
 };
 
 module.exports = authController;
