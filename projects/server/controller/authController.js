@@ -64,7 +64,23 @@ const authController = {
     }
   },
 
-  resetPassword: async (req, res) => {},
+
+  resetPassword: async (req, res) => {
+    const { id } = req.user;
+    const { password, confirmPassword } = req.body;
+    console.log(id, password, confirmPassword);
+    if (password !== confirmPassword)
+      return res.status(400).json({ message: "Password tidak sama" });
+
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const Hashpassword = await bcrypt.hash(password, salt);
+      await user.update({ password: Hashpassword }, { where: { id } });
+
+      return res.status(200).json({ message: "Password berhasil diubah" });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+
 
   register: async (req, res) => {
     try {
@@ -84,6 +100,7 @@ const authController = {
         .json({ success: "register berhasil", createkasir });
     } catch (error) {
       return res.status(500).json({ message: error.message });
+
     }
   },
 };
