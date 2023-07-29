@@ -23,7 +23,9 @@ const verifyToken = async (req, res, next) => {
 };
 
 const cekRole = async (req, res, next) => {
-  if (req.user.role != "admin")
+  const { id } = req.user;
+  const cekUser = await db.User.findByPk(id);
+  if (cekUser.role != "admin")
     return res.status(200).json({ message: "forbidden" });
 
   next();
