@@ -6,11 +6,10 @@ const {
   productValidator,
   resultValidation,
 } = require("../middleware/validator");
-const { verify } = require("../helpers/transporter");
 
+router.get("/", productController.getProdukQuery);
 router.post(
   "/upload",
-
   verifyToken,
   cekRole,
   multerUpload.single("productImg"),
