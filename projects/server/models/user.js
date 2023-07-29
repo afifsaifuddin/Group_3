@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       username: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      role: DataTypes.STRING,
+      role: { type: DataTypes.STRING, defaultValue: "cashier" },
       isActive: { type: DataTypes.BOOLEAN, defaultValue: false },
       imgProfile: DataTypes.STRING,
     },
