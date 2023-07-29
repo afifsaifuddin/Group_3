@@ -30,6 +30,22 @@ const sendEmail = async (result) => {
     html: tempResult,
   });
 };
+
+const kirimEmailRegister = async (email, username) => {
+  const data = await fs.readFile(
+    path.resolve(__dirname, "../emails/registercashier.html"),
+    "utf-8"
+  );
+  const tesCompile = handlebars.compile(data);
+  const tempResult = tesCompile({ email, username });
+
+  await transporter.sendMail({
+    to: email,
+    subject: "Register Kasir Magfirah",
+    html: tempResult,
+  });
+};
+
 const authController = {
   login: async (req, res) => {
     try {
@@ -42,8 +58,12 @@ const authController = {
       }
       const isValid = await bcrypt.compare(password, cekUser.password);
       if (!isValid) return res.status(404).json({ message: "password salah" });
+      const payload = { id: cekUser.id, role: cekUser.role };
+      const token = jwt.sign(payload, process.env.JWT_KEY, {
+        expiresIn: "24h",
+      });
 
-      return res.status(200).json({ success: "login berhasil", cekUser });
+      return res.status(200).json({ success: "login berhasil", token });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -84,17 +104,19 @@ const authController = {
 
   register: async (req, res) => {
     try {
-      const { username, email, phone, password, confirmpassword } = req.body;
-      const createkasir = await user.create({
-        username,
-        email,
-        phone,
-        password,
-        confirmpassword,
-      });
+      let { username, email, password, confirmpassword } = req.body;
       if (password !== confirmpassword) {
         return res.status(400).json({ error: "Password tidak sama" });
       }
+      const salt = await bcrypt.genSalt(10);
+      password = await bcrypt.hash(password, salt);
+      const createkasir = await user.create({
+        username,
+        email,
+        password,
+        confirmpassword,
+      });
+      await kirimEmailRegister(email, username);
       return res
         .status(200)
         .json({ success: "register berhasil", createkasir });
@@ -102,6 +124,16 @@ const authController = {
       return res.status(500).json({ message: error.message });
     }
   },
-};
 
+  updateActive: async (req, res) => {
+    try {
+      const { id } = req.user;
+      const { isActive } = req.body;
+      await user.update({ isActive }, { where: { id } });
+      return res.status(200).json({ message: "update status berhasil" });
+    } catch (err) {
+      return res.status(500).json({ message: "user tidak ditemukan" });
+    }
+  },
+};
 module.exports = authController;

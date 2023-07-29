@@ -19,8 +19,10 @@ app.use(
 
 app.use(express.json());
 
-const { authRouter } = require("../routers");
+const { authRouter, productRouter, categoryRouter } = require("../routers");
 app.use("/pos-kasir", authRouter);
+app.use("/product", productRouter);
+app.use("/category", categoryRouter);
 //#region API ROUTES
 
 // ===========================
