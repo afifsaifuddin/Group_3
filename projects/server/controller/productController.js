@@ -2,6 +2,7 @@ const db = require("../models");
 const product = db.Product;
 const fs = require("fs").promises;
 
+const database = [{ model: db.Category, attributes: ["name"] }];
 const setPagination = (limit, page) => {
   const offset = (page - 1) * +limit;
   return { limit: parseInt(limit), offset };
@@ -18,7 +19,7 @@ const productController = {
       name,
     } = req.query;
 
-    const where = {};
+    const where = { isActive: true };
     if (name) where.name = { [db.Sequelize.Op.like]: `%${name}%` };
     if (categoryId) where.categoryId = categoryId;
 
@@ -28,6 +29,7 @@ const productController = {
     try {
       const result = await product.findAll({
         where,
+        include: database,
         order: [[orderBy, order]],
         ...pagination,
       });
@@ -37,6 +39,17 @@ const productController = {
       return res.status(500).json({ message: err.message });
     }
   },
+
+  getProdukbyId: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const result = await product.findByPk(id, { include: database });
+      return res.status(200).json({ message: "success", result });
+    } catch (err) {
+      return req.status(500).json({ message: err.message });
+    }
+  },
+
   uploadProduk: async (req, res) => {
     try {
       const {
@@ -110,7 +123,10 @@ const productController = {
           { where: { id } },
           { transaction: t }
         );
-        return res.status(200).json({ message: "produk deactivate" });
+        if (isActive)
+          return res.status(200).json({ message: "produk telah diaktifkan" });
+
+        return req.status(200).json({ message: "produk telah dinonaktifkan" });
       });
     } catch (err) {
       return res.status(500).json({ message: err.message });

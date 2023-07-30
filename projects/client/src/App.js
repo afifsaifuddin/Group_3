@@ -9,10 +9,22 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/dashbordadmin" element={<Dashboardadmin />}></Route>
-        <Route path="/dashbordkasir" element={<Dashboardkasir />}></Route>
-        <Route path="/resetpassword" element={<Resetpassword />}></Route>
+        <Route
+          path="/login"
+          element={<Login />}
+        ></Route>
+        <Route
+          path="/dashbordadmin"
+          element={<Dashboardadmin />}
+        ></Route>
+        <Route
+          path="/dashbordkasir"
+          element={<Dashboardkasir />}
+        ></Route>
+        <Route
+          path="/resetpassword"
+          element={<Resetpassword />}
+        ></Route>
       </Routes>
     </>
   );

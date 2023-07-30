@@ -132,9 +132,30 @@ const authController = {
       const { id } = req.user;
       const { isActive } = req.body;
       await user.update({ isActive }, { where: { id } });
-      return res.status(200).json({ message: "update status berhasil" });
+      if (isActive)
+        return res.status(200).json({ message: "user sudah diaktifkan" });
+
+      return res.status(200).json({ message: "user sudah di nonaktifkan" });
     } catch (err) {
       return res.status(500).json({ message: "user tidak ditemukan" });
+    }
+  },
+
+  updateProfilePicture: async (req, res) => {
+    try {
+      const { id } = req.user;
+      const profil = await user.findByPk(id);
+      console.log(req.file);
+      if (profil.imgProfile) {
+        fs.unlink(profil.imgProfile, (err) => {
+          if (err) return res.status(500).json({ message: err.message });
+        });
+      }
+      await user.update({ imgProfile: req.file.path }, { where: { id } });
+
+      res.status(200).json({ message: "Ganti foto profil berhasil" });
+    } catch (err) {
+      res.status(500).json({ message: "ada yang salah" });
     }
   },
 };

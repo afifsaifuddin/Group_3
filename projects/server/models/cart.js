@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   Cart.init(
     {
       userId: DataTypes.INTEGER,
-      totalPrice: DataTypes.FLOAT,
+      totalPrice: { type: DataTypes.FLOAT, defaultValue: 0 },
+      isDone: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {
       sequelize,
