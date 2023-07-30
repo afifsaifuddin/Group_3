@@ -63,7 +63,9 @@ const authController = {
         expiresIn: "24h",
       });
 
-      return res.status(200).json({ success: "login berhasil", token });
+      return res
+        .status(200)
+        .json({ success: "login berhasil", token, cekUser });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
