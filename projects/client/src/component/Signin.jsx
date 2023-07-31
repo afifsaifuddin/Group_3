@@ -52,12 +52,12 @@ export default function Signin() {
     onSubmit: (values) => {
       dispatch(Signinreducer(values));
 
-      try {
-        alert("Login Berhasil");
-        navigate("/home");
-      } catch (error) {
-        alert("Login Gagal");
-      }
+      // try {
+      //   alert("Login Berhasil");
+      //   navigate("/home");
+      // } catch (error) {
+      //   alert("Login Gagal");
+      // }
     },
   });
 

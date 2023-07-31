@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer, Stack } from "@chakra-ui/react";
+import { Box, Button, Flex, Spacer, Stack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Welcome from "./welcome";
 import Produk from "./produk";
@@ -10,8 +10,12 @@ import {
   MdOutlineAdminPanelSettings,
   MdLogout,
 } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutSuccess } from "../redux/reducer/authreducer";
 
 export const Sidebar = () => {
+  const dispatch = useDispatch();
+  const role = useSelector((state) => state.authreducer.role);
   const [activePage, setActivePage] = useState("home");
   const renderPaage = () => {
     switch (activePage) {
@@ -35,11 +39,15 @@ export const Sidebar = () => {
           <Link onClick={() => setActivePage("produk")}>
             <MdProductionQuantityLimits size={"100px"} />
           </Link>
-          <Link onClick={() => setActivePage("admin")}>
-            <MdOutlineAdminPanelSettings size={"100px"} />
-          </Link>
+          {role === "admin" ? (
+            <Link onClick={() => setActivePage("admin")}>
+              <MdOutlineAdminPanelSettings size={"100px"} />
+            </Link>
+          ) : null}
           <Box mt={"45vh"}>
-            <MdLogout size={"100px"} />
+            <Button onClick={() => dispatch(logoutSuccess)}>
+              <MdLogout size={"100px"} />
+            </Button>
           </Box>
         </Stack>
       </Box>
