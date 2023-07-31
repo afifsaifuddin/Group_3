@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const { createSlice } = require("@reduxjs/toolkit");
 const axios = require("axios");
 
@@ -32,14 +34,15 @@ export const authreducer = createSlice({
     loginSuccess: (state) => {
       state.login = true;
     },
-    // logoutSuccess: (state) => {
-    //   state.login = false;
-    //   localStorage.removeItem("token");
-    // },
+    logoutSuccess: (state) => {
+      state.login = false;
+      localStorage.removeItem("token");
+    },
   },
 });
 
 export const Signinreducer = (values) => {
+  const navigate = useNavigate();
   return async (dispatch) => {
     try {
       const res = await axios.post("http://localhost:8000/pos-kasir/login", {
@@ -51,10 +54,12 @@ export const Signinreducer = (values) => {
       localStorage.setItem("token", token);
       dispatch(loginSuccess());
       dispatch(setUser(res.data));
+      // navigate("/home");
     } catch (error) {
-      console.log(error);
+      alert("error");
+      // console.log(error);
     }
   };
 };
-export const { setUser, loginSuccess } = authreducer.actions;
+export const { setUser, loginSuccess, logoutSuccess } = authreducer.actions;
 export default authreducer.reducer;

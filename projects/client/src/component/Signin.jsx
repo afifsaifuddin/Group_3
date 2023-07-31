@@ -21,7 +21,7 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import { BiShowAlt, BiSolidHide } from "react-icons/bi";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Signinreducer } from "../redux/reducer/authreducer";
 import { Modalforgotpass } from "./forgotpassword";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +40,6 @@ export default function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const role = useSelector((state) => state.authreducer.role);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowClick = () => setShowPassword(!showPassword);
 
@@ -53,16 +52,12 @@ export default function Signin() {
     onSubmit: (values) => {
       dispatch(Signinreducer(values));
 
-      try {
-        alert("Login Berhasil");
-        if (role === "admin") {
-          navigate("/dashbordadmin");
-        } else {
-          navigate("/dashbordkasir");
-        }
-      } catch (error) {
-        alert("Login Gagal");
-      }
+      // try {
+      //   alert("Login Berhasil");
+      //   navigate("/home");
+      // } catch (error) {
+      //   alert("Login Gagal");
+      // }
     },
   });
 
