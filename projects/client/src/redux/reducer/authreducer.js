@@ -39,7 +39,7 @@ export const authreducer = createSlice({
   },
 });
 
-export const Signinreducer = (values) => {
+export const Signinreducer = (values, navigate) => {
   return async (dispatch) => {
     try {
       const res = await axios.post("http://localhost:8000/pos-kasir/login", {
@@ -50,9 +50,11 @@ export const Signinreducer = (values) => {
       const token = res.data.token;
       localStorage.setItem("token", token);
       dispatch(loginSuccess());
-      dispatch(setUser(res.data));
+      dispatch(setUser(res.data.cekUser));
+      alert("Login Berhasil");
+      navigate("/dashbordadmin");
     } catch (error) {
-      console.log(error);
+      alert(error.message);
     }
   };
 };

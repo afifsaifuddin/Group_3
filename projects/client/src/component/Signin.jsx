@@ -40,7 +40,7 @@ export default function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const role = useSelector((state) => state.authreducer.role);
+  const { role } = useSelector((state) => state.authreducer.user);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowClick = () => setShowPassword(!showPassword);
 
@@ -51,18 +51,18 @@ export default function Signin() {
     },
     validationSchema: loginschema,
     onSubmit: (values) => {
-      dispatch(Signinreducer(values));
+      dispatch(Signinreducer(values, navigate));
 
-      try {
-        alert("Login Berhasil");
-        if (role === "admin") {
-          navigate("/dashbordadmin");
-        } else {
-          navigate("/dashbordkasir");
-        }
-      } catch (error) {
-        alert("Login Gagal");
-      }
+      // try {
+      //   alert("Login Berhasil");
+      //   if (role === "admin") {
+      //     navigate("/dashbordadmin");
+      //   } else {
+      //     navigate("/dashbordkasir");
+      //   }
+      // } catch (error) {
+      //   alert("Login Gagal");
+      // }
     },
   });
 
@@ -97,7 +97,10 @@ export default function Signin() {
                 <FormControl
                   isInvalid={formik.touched.username && formik.errors.username}
                 >
-                  <FormLabel htmlFor="username" fontWeight={"bold"}>
+                  <FormLabel
+                    htmlFor="username"
+                    fontWeight={"bold"}
+                  >
                     Username
                   </FormLabel>
                   <InputGroup>
@@ -123,7 +126,10 @@ export default function Signin() {
                 <FormControl
                   isInvalid={formik.touched.password && formik.errors.password}
                 >
-                  <FormLabel htmlFor="password" fontWeight={"bold"}>
+                  <FormLabel
+                    htmlFor="password"
+                    fontWeight={"bold"}
+                  >
                     Password
                   </FormLabel>
                   <InputGroup>
@@ -192,7 +198,11 @@ export default function Signin() {
           </Box>
         </Stack>
       </Flex>
-      <Modalforgotpass isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+      <Modalforgotpass
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpen={onOpen}
+      />
     </Box>
   );
 }
