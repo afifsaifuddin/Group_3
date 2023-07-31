@@ -5,7 +5,9 @@ import { useSelector } from "react-redux";
 export const AvatarKasir = () => {
   const { user } = useSelector((state) => state.authreducer);
   console.log(user);
-  const imgProfile = user.imgProfile.replace(/\\/g, "/");
+  let imgProfile;
+  if (user.imgProfile)
+    imgProfile = "http://localhost:8000/" + user.imgProfile.replace(/\\/g, "/");
   return (
     <Flex
       borderRadius={"8px"}
@@ -15,13 +17,12 @@ export const AvatarKasir = () => {
       justifyContent={"left"}
       bgColor="#2D4356"
       color={"white"}
-      margin={"auto"}
     >
       <Box ml={"10px"}>
         <Avatar
           color="white"
           name={user.username}
-          src={`http://localhost:8000/${imgProfile}`}
+          src={`${imgProfile}`}
         />
       </Box>
       <Stack

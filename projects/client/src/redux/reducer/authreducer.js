@@ -54,7 +54,7 @@ export const Signinreducer = (values, navigate) => {
       dispatch(loginSuccess());
       dispatch(setUser(res.data.cekUser));
       alert("Login Berhasil");
-      navigate("/dashbordadmin");
+      navigate("/home");
     } catch (error) {
       alert(error.message);
     }
