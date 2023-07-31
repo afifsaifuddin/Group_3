@@ -12,7 +12,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/dashbordadmin" element={<Dashboardadmin />}></Route>
         <Route path="/dashbordkasir" element={<Dashboardkasir />}></Route>
-        <Route path="/resetpassword" element={<Resetpassword />}></Route>
+        <Route path="/resetpassword/:token" element={<Resetpassword />}></Route>
       </Routes>
     </>
   );
