@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const { createSlice } = require("@reduxjs/toolkit");
 const axios = require("axios");
 
@@ -32,10 +34,10 @@ export const authreducer = createSlice({
     loginSuccess: (state) => {
       state.login = true;
     },
-    // logoutSuccess: (state) => {
-    //   state.login = false;
-    //   localStorage.removeItem("token");
-    // },
+    logoutSuccess: (state) => {
+      state.login = false;
+      localStorage.removeItem("token");
+    },
   },
 });
 
@@ -58,5 +60,5 @@ export const Signinreducer = (values, navigate) => {
     }
   };
 };
-export const { setUser, loginSuccess } = authreducer.actions;
+export const { setUser, loginSuccess, logoutSuccess } = authreducer.actions;
 export default authreducer.reducer;
