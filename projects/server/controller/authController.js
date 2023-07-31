@@ -16,7 +16,7 @@ const sendEmail = async (result) => {
   const token = jwt.sign(payload, process.env.JWT_KEY, {
     expiresIn: "1h",
   });
-  const redirect = `http://localhost:3000/verification?${token}`;
+  const redirect = `http://localhost:3000/resetpassword/${token}`;
   const data = await fs.readFile(
     path.resolve(__dirname, "../emails/forgotpassword.html"),
     "utf-8"

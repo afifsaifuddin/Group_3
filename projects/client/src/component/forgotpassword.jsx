@@ -59,10 +59,7 @@ export const Modalforgotpass = ({ isOpen, onClose }) => {
     <Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <form onSubmit={formik.handleSubmit}>
-          <ModalOverlay
-            bg="blackAlpha.300"
-            backdropFilter="blur(10px) hue-rotate(90deg)"
-          />
+          <ModalOverlay />
           <ModalContent>
             <ModalHeader>Lupa Password ?</ModalHeader>
             <ModalBody>
@@ -71,6 +68,7 @@ export const Modalforgotpass = ({ isOpen, onClose }) => {
                 <Input
                   type="email"
                   name="email"
+                  focusBorderColor="#FD8A8A"
                   onChange={formik.handleChange}
                   value={formik.values.email}
                 />
@@ -78,7 +76,13 @@ export const Modalforgotpass = ({ isOpen, onClose }) => {
               </FormControl>
             </ModalBody>
             <ModalFooter>
-              <Button type="submit" colorScheme="teal">
+              <Button
+                type="submit"
+                colorScheme="teal"
+                bgColor={"#FD8A8A"}
+                _hover={{ color: "#FD8A8A" }}
+              >
+
                 Kirim
               </Button>
             </ModalFooter>
