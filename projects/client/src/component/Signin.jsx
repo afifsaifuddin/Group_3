@@ -50,7 +50,7 @@ export default function Signin() {
     },
     validationSchema: loginschema,
     onSubmit: (values) => {
-      dispatch(Signinreducer(values));
+      dispatch(Signinreducer(values, navigate));
 
       // try {
       //   alert("Login Berhasil");

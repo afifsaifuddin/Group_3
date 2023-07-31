@@ -15,7 +15,7 @@ import { logoutSuccess } from "../redux/reducer/authreducer";
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
-  const role = useSelector((state) => state.authreducer.role);
+  const role = useSelector((state) => state.authreducer.user.role);
   const [activePage, setActivePage] = useState("home");
   const renderPaage = () => {
     switch (activePage) {

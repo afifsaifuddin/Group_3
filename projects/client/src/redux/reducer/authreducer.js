@@ -53,11 +53,11 @@ export const Signinreducer = (values) => {
       const token = res.data.token;
       localStorage.setItem("token", token);
       dispatch(loginSuccess());
-      dispatch(setUser(res.data));
-      // navigate("/home");
+      dispatch(setUser(res.data.cekUser));
+      alert("Login Berhasil");
+      navigate("/home");
     } catch (error) {
-      alert("error");
-      // console.log(error);
+      alert(error.message);
     }
   };
 };
