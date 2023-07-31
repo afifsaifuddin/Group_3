@@ -24,7 +24,7 @@ export const Resetpassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const handleShowPass = () => setShowPassword(!showConfirmPass);
-  const handleShowConfirmpass = () => setShowConfirmPass(!showPassword);
+  const handleShowConfirmpass = () => setShowConfirmPass(!showConfirmPass);
   const resetPasswordSchema = Yup.object().shape({
     password: Yup.string()
       .required("Password harus diisi")
@@ -32,7 +32,7 @@ export const Resetpassword = () => {
         /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{6,}$/,
         "Password minimal 6 karakter, 1 symbol, dan 1 huruf kapital"
       ),
-    confirmpassword: Yup.string()
+    confirmPassword: Yup.string()
       .required("Password harus diisi")
       .oneOf([Yup.ref("password"), null], "Password tidak sama"),
   });
@@ -40,8 +40,9 @@ export const Resetpassword = () => {
     const url = window.location.href.split("/");
     const token = url.pop();
     try {
-      const res = await axios.post(
+      const res = await axios.patch(
         "http://localhost:8000/pos-kasir/reset-password",
+        // { password, confirmPassword },
         values,
         {
           headers: {
@@ -50,7 +51,7 @@ export const Resetpassword = () => {
         }
       );
       console.log(res);
-      document.location.href = "/login";
+      document.location.href = "/";
     } catch (error) {
       console.log(error);
     }
@@ -58,12 +59,12 @@ export const Resetpassword = () => {
   const formik = useFormik({
     initialValues: {
       password: "",
-      confirmpassword: "",
+      confirmPassword: "",
     },
     validationSchema: resetPasswordSchema,
     onSubmit: (values) => {
       resetpass(values);
-      navigate("/login");
+      navigate("/");
     },
   });
   return (
@@ -129,11 +130,11 @@ export const Resetpassword = () => {
                 </FormControl>
                 <FormControl
                   isInvalid={
-                    formik.touched.confirmpassword &&
-                    formik.errors.confirmpassword
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
                   }
                 >
-                  <FormLabel htmlFor="confirmpassword" fontWeight={"bold"}>
+                  <FormLabel htmlFor="confirmPassword" fontWeight={"bold"}>
                     Confirm Password
                   </FormLabel>
                   <InputGroup>
@@ -141,12 +142,12 @@ export const Resetpassword = () => {
                       <RiLockPasswordFill />
                     </InputLeftElement>
                     <Input
-                      name="confirmpassword"
-                      id="confirmpassword"
+                      name="confirmPassword"
+                      id="confirmPassword"
                       type={showConfirmPass ? "text" : "password"}
-                      placeholder="confirmpassword"
+                      placeholder="confirmPassword"
                       onChange={formik.handleChange}
-                      value={formik.values.confirmpassword}
+                      value={formik.values.confirmPassword}
                     />
                     <InputRightElement>
                       <Button
@@ -158,11 +159,12 @@ export const Resetpassword = () => {
                       </Button>
                     </InputRightElement>
                   </InputGroup>
-                  {formik.touched.password && formik.errors.password && (
-                    <FormErrorMessage>
-                      {formik.errors.password}
-                    </FormErrorMessage>
-                  )}
+                  {formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword && (
+                      <FormErrorMessage>
+                        {formik.errors.confirmPassword}
+                      </FormErrorMessage>
+                    )}
                 </FormControl>
                 <Button
                   borderRadius={5}
