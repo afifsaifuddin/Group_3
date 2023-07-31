@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 const { createSlice } = require("@reduxjs/toolkit");
 const axios = require("axios");
 
@@ -41,14 +39,14 @@ export const authreducer = createSlice({
   },
 });
 
-export const Signinreducer = (values) => {
-  const navigate = useNavigate();
+export const Signinreducer = (values, navigate) => {
   return async (dispatch) => {
     try {
       const res = await axios.post("http://localhost:8000/pos-kasir/login", {
         username: values.username,
         password: values.password,
       });
+
       console.log(res);
       const token = res.data.token;
       localStorage.setItem("token", token);
