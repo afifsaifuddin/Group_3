@@ -31,14 +31,8 @@ export const Sidebar = () => {
   };
   return (
     <Flex>
-      <Box
-        bg={"blue.100"}
-        height={"100vh"}
-      >
-        <Stack
-          p={3}
-          wrap={"wrap"}
-        >
+      <Box bg={"blue.100"} height={"100vh"}>
+        <Stack p={3} wrap={"wrap"}>
           <Link onClick={() => setActivePage("home")}>
             <GoHome size={"100px"} />
           </Link>
@@ -57,10 +51,7 @@ export const Sidebar = () => {
           </Box>
         </Stack>
       </Box>
-      <Box
-        bgColor={"green.100"}
-        w={"100%"}
-      >
+      <Box bgColor={"green.100"} w={"100%"}>
         {renderPaage()}
       </Box>
     </Flex>
