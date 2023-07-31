@@ -61,5 +61,22 @@ export const Signinreducer = (values) => {
     }
   };
 };
+
+export const cekLogin = () => {
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get("http://localhost:8000/pos-kasir/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch(setUser(res.data.cekUser));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+};
+
 export const { setUser, loginSuccess, logoutSuccess } = authreducer.actions;
 export default authreducer.reducer;
