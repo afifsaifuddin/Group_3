@@ -82,6 +82,7 @@ export const Modalforgotpass = ({ isOpen, onClose }) => {
                 bgColor={"#FD8A8A"}
                 _hover={{ color: "#FD8A8A" }}
               >
+
                 Kirim
               </Button>
             </ModalFooter>

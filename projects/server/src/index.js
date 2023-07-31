@@ -20,12 +20,19 @@ app.use(
 
 app.use(express.json());
 
-const { authRouter, productRouter, categoryRouter } = require("../routers");
+const {
+  authRouter,
+  productRouter,
+  categoryRouter,
+  cartRouter,
+} = require("../routers");
+
+//#region API ROUTES
+
 app.use("/pos-kasir", authRouter);
 app.use("/product", productRouter);
 app.use("/category", categoryRouter);
-//#region API ROUTES
-
+app.use("/cart", cartRouter);
 // ===========================
 // NOTE : Add your routes here
 

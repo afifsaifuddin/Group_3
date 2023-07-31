@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controller/authController");
-
+const { multerUpload } = require("../middleware/multer");
 const {
   loginValidator,
   regisValidator,
@@ -27,5 +27,10 @@ router.post(
   authController.register
 );
 router.patch("/active-cashier", verifyToken, authController.updateActive);
-
+router.patch(
+  "/ganti-avatar",
+  verifyToken,
+  multerUpload.single("imgProfile"),
+  authController.updateProfilePicture
+);
 module.exports = router;
