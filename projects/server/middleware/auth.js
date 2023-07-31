@@ -26,9 +26,20 @@ const cekRole = async (req, res, next) => {
   const { id } = req.user;
   const cekUser = await db.User.findByPk(id);
   if (cekUser.role != "admin")
-    return res.status(200).json({ message: "forbidden" });
+    return res.status(200).json({ message: "anda bukan admin" });
 
   next();
 };
 
-module.exports = { verifyToken, cekRole };
+const cekCart = async (req, res, next) => {
+  const { id } = req.user;
+  try {
+    const cekCart = await db.Cart.findOne({ where: { userId: id } });
+    req.cart = cekCart;
+    next();
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { verifyToken, cekRole, cekCart };

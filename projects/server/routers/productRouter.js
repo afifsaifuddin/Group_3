@@ -8,6 +8,7 @@ const {
 } = require("../middleware/validator");
 
 router.get("/", productController.getProdukQuery);
+router.get("/:id", productController.getProdukbyId);
 router.post(
   "/upload",
   verifyToken,
@@ -25,4 +26,5 @@ router.patch(
   cekRole,
   productController.updateProduk
 );
+
 module.exports = router;
