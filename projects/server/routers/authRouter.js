@@ -33,4 +33,7 @@ router.patch(
   multerUpload.single("imgProfile"),
   authController.updateProfilePicture
 );
+
+router.get("/", verifyToken, authController.cekUser);
+
 module.exports = router;
