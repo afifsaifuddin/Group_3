@@ -40,8 +40,7 @@ export const authreducer = createSlice({
   },
 });
 
-export const Signinreducer = (values) => {
-  const navigate = useNavigate();
+export const Signinreducer = (values, navigate) => {
   return async (dispatch) => {
     try {
       const res = await axios.post("http://localhost:8000/pos-kasir/login", {
