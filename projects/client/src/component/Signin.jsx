@@ -21,7 +21,7 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import { BiShowAlt, BiSolidHide } from "react-icons/bi";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Signinreducer } from "../redux/reducer/authreducer";
 import { Modalforgotpass } from "./forgotpassword";
 import { useNavigate } from "react-router-dom";
@@ -40,6 +40,7 @@ export default function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const { role } = useSelector((state) => state.authreducer.user);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowClick = () => setShowPassword(!showPassword);
 
@@ -51,16 +52,17 @@ export default function Signin() {
     validationSchema: loginschema,
     onSubmit: (values) => {
       dispatch(Signinreducer(values, navigate));
-<<<<<<< Updated upstream
 
       // try {
       //   alert("Login Berhasil");
-      //   navigate("/home");
+      //   if (role === "admin") {
+      //     navigate("/dashbordadmin");
+      //   } else {
+      //     navigate("/dashbordkasir");
+      //   }
       // } catch (error) {
       //   alert("Login Gagal");
       // }
-=======
->>>>>>> Stashed changes
     },
   });
 
@@ -95,7 +97,10 @@ export default function Signin() {
                 <FormControl
                   isInvalid={formik.touched.username && formik.errors.username}
                 >
-                  <FormLabel htmlFor="username" fontWeight={"bold"}>
+                  <FormLabel
+                    htmlFor="username"
+                    fontWeight={"bold"}
+                  >
                     Username
                   </FormLabel>
                   <InputGroup>
@@ -121,7 +126,10 @@ export default function Signin() {
                 <FormControl
                   isInvalid={formik.touched.password && formik.errors.password}
                 >
-                  <FormLabel htmlFor="password" fontWeight={"bold"}>
+                  <FormLabel
+                    htmlFor="password"
+                    fontWeight={"bold"}
+                  >
                     Password
                   </FormLabel>
                   <InputGroup>
@@ -157,6 +165,13 @@ export default function Signin() {
                     fontWeight={"bold"}
                     mt={"15px"}
                   >
+                    {/* <Link
+                      href={() => {
+                        onOpen();
+                      }}
+                    >
+                      forgot password?
+                    </Link> */}
                     <Button
                       variant={""}
                       color={"black "}
@@ -183,7 +198,11 @@ export default function Signin() {
           </Box>
         </Stack>
       </Flex>
-      <Modalforgotpass isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+      <Modalforgotpass
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpen={onOpen}
+      />
     </Box>
   );
 }
