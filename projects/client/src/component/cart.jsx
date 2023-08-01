@@ -1,10 +1,17 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 
 export const Cart = () => {
   return (
     <Box>
-      <h3>ini keranjang</h3>
+      <Stack alignItems={"center"}>
+        <Box>
+          <Text> ini keranjang</Text>
+        </Box>
+        <Box mt={"80vh"}>
+          <Button px={"100px"}>Bayar</Button>
+        </Box>
+      </Stack>
     </Box>
   );
 };

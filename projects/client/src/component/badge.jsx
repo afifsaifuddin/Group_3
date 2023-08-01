@@ -15,15 +15,11 @@ export const AvatarKasir = () => {
       maxW={"250px"}
       w={"100%"}
       justifyContent={"left"}
-      bgColor="#2D4356"
+      bgColor="blue.500"
       color={"white"}
     >
       <Box ml={"10px"}>
-        <Avatar
-          color="white"
-          name={user.username}
-          src={`${imgProfile}`}
-        />
+        <Avatar color="white" name={user.username} src={`${imgProfile}`} />
       </Box>
       <Stack
         ml={"15px"}
