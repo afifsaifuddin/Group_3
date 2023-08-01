@@ -3,6 +3,7 @@ const axios = require("axios");
 
 const initialState = {
   produk: [],
+  cart: [],
 };
 
 const produkReducer = createSlice({
@@ -11,6 +12,12 @@ const produkReducer = createSlice({
   reducers: {
     setProduk: (state, action) => {
       state.produk = [...action.payload];
+    },
+    setCart: (state, action) => {
+      console.log(state.cart);
+      state.cart = [...state.cart, action.payload];
+
+      console.log(state.cart);
     },
   },
 });
@@ -24,5 +31,5 @@ export const getProduk = () => async (dispatch) => {
   }
 };
 
-export const { setProduk } = produkReducer.actions;
+export const { setProduk, setCart } = produkReducer.actions;
 export default produkReducer.reducer;

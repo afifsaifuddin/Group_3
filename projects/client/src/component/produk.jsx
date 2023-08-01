@@ -14,9 +14,10 @@ export const Produk = () => {
 
   const produk = useSelector((state) => state.produkreducer.produk);
   return (
-    <Flex mt={"20px"} ml={"20px"}>
+    <Flex mt={"20px"} ml={"20px"} justify={"space-between"}>
       <Flex wrap={"wrap"} gap={"30px"}>
-        {produk && produk.map((item) => <CardProduk key={item.id} produk={item} />)}
+        {produk &&
+          produk.map((item) => <CardProduk key={item.id} produk={item} />)}
       </Flex>
       <Cart />
     </Flex>
