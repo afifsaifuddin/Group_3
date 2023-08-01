@@ -51,16 +51,6 @@ export default function Signin() {
     validationSchema: loginschema,
     onSubmit: (values) => {
       dispatch(Signinreducer(values, navigate));
-<<<<<<< Updated upstream
-
-      // try {
-      //   alert("Login Berhasil");
-      //   navigate("/home");
-      // } catch (error) {
-      //   alert("Login Gagal");
-      // }
-=======
->>>>>>> Stashed changes
     },
   });
 
