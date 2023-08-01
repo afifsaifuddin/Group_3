@@ -3,6 +3,7 @@ const axios = require("axios");
 
 const initialState = {
   produk: [],
+  page: 0,
 };
 
 const produkReducer = createSlice({
@@ -10,19 +11,28 @@ const produkReducer = createSlice({
   initialState,
   reducers: {
     setProduk: (state, action) => {
+      console.log(action.payload);
+      console.log(...action.payload);
       state.produk = [...action.payload];
+    },
+    setPage: (state, action) => {
+      state.page = action.payload;
+      console.log(state.page);
     },
   },
 });
 
-export const getProduk = () => async (dispatch) => {
-  try {
-    const res = await axios.get("http://localhost:8000/product/");
-    dispatch(setProduk(res.data.result));
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const getProduk =
+  (page = 1) =>
+  async (dispatch) => {
+    try {
+      const res = await axios.get(`http://localhost:8000/product/?page=${page}`);
+      dispatch(setProduk(res.data.result));
+      dispatch(setPage(res.data.totalPage));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-export const { setProduk } = produkReducer.actions;
+export const { setProduk, setPage } = produkReducer.actions;
 export default produkReducer.reducer;
