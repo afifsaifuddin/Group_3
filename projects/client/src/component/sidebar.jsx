@@ -12,6 +12,7 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../redux/reducer/authreducer";
+import Cart from "./cart";
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
@@ -29,23 +30,48 @@ export const Sidebar = () => {
         return null;
     }
   };
+
+  const handleLogout = (e) => {
+    dispatch(logoutSuccess());
+  };
+
   return (
-    <Flex>
-      <Box bg={"blue.100"} height={"100vh"}>
-        <Stack p={3} wrap={"wrap"}>
-          <Link onClick={() => setActivePage("home")}>
+    <Flex height={"100%"}>
+      <Box bg={"blue.500"}>
+        <Stack p={3} wrap={"wrap"} gap={"20px"}>
+          <Button
+            onClick={() => setActivePage("home")}
+            _hover={{ bgColor: "blue.700" }}
+            variant={""}
+            size={"50px"}
+          >
             <GoHome size={"100px"} />
-          </Link>
-          <Link onClick={() => setActivePage("produk")}>
+          </Button>
+          <Button
+            onClick={() => setActivePage("produk")}
+            _hover={{ bgColor: "blue.700" }}
+            variant={""}
+            size={"50px"}
+          >
             <MdProductionQuantityLimits size={"100px"} />
-          </Link>
+          </Button>
           {role === "admin" ? (
-            <Link onClick={() => setActivePage("admin")}>
+            <Button
+              onClick={() => setActivePage("admin")}
+              _hover={{ bgColor: "blue.700" }}
+              variant={""}
+              size={"50px"}
+            >
               <MdOutlineAdminPanelSettings size={"100px"} />
-            </Link>
+            </Button>
           ) : null}
-          <Box mt={"45vh"}>
-            <Button onClick={() => dispatch(logoutSuccess)}>
+          <Box mt={"40vh"}>
+            <Button
+              onClick={handleLogout}
+              _hover={{ bgColor: "blue.700" }}
+              variant={""}
+              size={"50px"}
+            >
               <MdLogout size={"100px"} />
             </Button>
           </Box>

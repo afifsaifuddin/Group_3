@@ -7,8 +7,8 @@ export const Home = () => {
   return (
     <Box>
       <Navbar />
+
       <Sidebar />
-      <Cart />
     </Box>
   );
 };

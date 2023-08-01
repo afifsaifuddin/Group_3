@@ -51,6 +51,7 @@ export default function Signin() {
     validationSchema: loginschema,
     onSubmit: (values) => {
       dispatch(Signinreducer(values, navigate));
+<<<<<<< Updated upstream
 
       // try {
       //   alert("Login Berhasil");
@@ -58,6 +59,8 @@ export default function Signin() {
       // } catch (error) {
       //   alert("Login Gagal");
       // }
+=======
+>>>>>>> Stashed changes
     },
   });
 
@@ -154,13 +157,6 @@ export default function Signin() {
                     fontWeight={"bold"}
                     mt={"15px"}
                   >
-                    {/* <Link
-                      href={() => {
-                        onOpen();
-                      }}
-                    >
-                      forgot password?
-                    </Link> */}
                     <Button
                       variant={""}
                       color={"black "}

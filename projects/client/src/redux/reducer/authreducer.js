@@ -37,6 +37,7 @@ export const authreducer = createSlice({
     logoutSuccess: (state) => {
       state.login = false;
       localStorage.removeItem("token");
+      document.location.href = "/";
     },
   },
 });
