@@ -1,9 +1,9 @@
-import { Box, Button, Flex, Spacer, Stack } from "@chakra-ui/react";
+import { Box, Button, Flex, Stack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Welcome from "./welcome";
 import Produk from "./produk";
 import Admin from "./admin";
-import { Link } from "react-router-dom";
+
 import { GoHome } from "react-icons/go";
 import {
   MdProductionQuantityLimits,
@@ -12,7 +12,6 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../redux/reducer/authreducer";
-import Cart from "./cart";
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
@@ -38,7 +37,7 @@ export const Sidebar = () => {
   return (
     <Flex height={"100%"}>
       <Box bg={"blue.500"}>
-        <Stack p={3} wrap={"wrap"} gap={"20px"}>
+        <Stack p={3} gap={"20px"}>
           <Button
             onClick={() => setActivePage("home")}
             _hover={{ bgColor: "blue.700" }}
