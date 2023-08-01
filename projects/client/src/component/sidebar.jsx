@@ -12,7 +12,6 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../redux/reducer/authreducer";
-import Cart from "./cart";
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
