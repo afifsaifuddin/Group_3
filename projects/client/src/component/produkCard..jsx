@@ -21,6 +21,9 @@ export const CardProduk = ({ produk }) => {
     dispatch(setCart(produk));
   };
 
+  const coba = () => {
+    console.log(produk);
+  };
   if (!produk) return <></>;
   return (
     <Flex>
