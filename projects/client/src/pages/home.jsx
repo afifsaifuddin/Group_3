@@ -9,6 +9,7 @@ export const Home = () => {
       <Navbar />
 
       <Sidebar />
+      <Cart />
     </Box>
   );
 };
