@@ -18,8 +18,7 @@ export const authreducer = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      const { id, username, email, role, isActive, imgProfile } =
-        action.payload;
+      const { id, username, email, role, isActive, imgProfile } = action.payload;
       state.user = {
         id,
         username,
@@ -47,8 +46,6 @@ export const Signinreducer = (values, navigate) => {
         username: values.username,
         password: values.password,
       });
-
-      console.log(res);
       const token = res.data.token;
       localStorage.setItem("token", token);
       dispatch(loginSuccess());

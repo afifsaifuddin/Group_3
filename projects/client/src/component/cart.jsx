@@ -5,7 +5,7 @@ export const Cart = () => {
   return (
     <Box>
       <Stack alignItems={"center"}>
-        <Box>
+        <Box> 
           <Text> ini keranjang</Text>
         </Box>
         <Box mt={"80vh"}>
