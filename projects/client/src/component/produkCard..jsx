@@ -1,9 +1,25 @@
-import { Box, Button, Card, CardBody, CardFooter, Flex, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Flex,
+  Heading,
+  Image,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import Cart from "./cart";
+import { useDispatch } from "react-redux";
+import { setCart } from "../redux/reducer/produkreducer";
 
 export const CardProduk = ({ produk }) => {
-  console.log(produk);
+  const dispatch = useDispatch();
+  const handleAddToCart = () => {
+    dispatch(setCart(produk));
+  };
 
   const coba = () => {
     console.log(produk);
@@ -17,7 +33,12 @@ export const CardProduk = ({ produk }) => {
             loading="lazy"
             objectFit="cover"
             maxW={{ base: "100%", sm: "200px" }}
-            src={produk ? "http://localhost:8000/" + produk.productImg.replace(/\\/g, "/") : ""}
+            src={
+              produk
+                ? "http://localhost:8000/" +
+                  produk.productImg.replace(/\\/g, "/")
+                : ""
+            }
             alt={produk.categoryId}
             borderRadius={"8px"}
           />
@@ -30,7 +51,11 @@ export const CardProduk = ({ produk }) => {
               </Text>
             </CardBody>
             <CardFooter>
-              <Button variant="solid" colorScheme="red" onClick={coba}>
+              <Button
+                variant="solid"
+                colorScheme="red"
+                onClick={handleAddToCart}
+              >
                 Tambahkan ke keranjang
               </Button>
             </CardFooter>
