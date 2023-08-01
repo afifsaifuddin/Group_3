@@ -5,6 +5,9 @@ import Cart from "./cart";
 export const CardProduk = ({ produk }) => {
   console.log(produk);
 
+  const coba = () => {
+    console.log(produk);
+  };
   if (!produk) return <></>;
   return (
     <Flex>
@@ -27,7 +30,7 @@ export const CardProduk = ({ produk }) => {
               </Text>
             </CardBody>
             <CardFooter>
-              <Button variant="solid" colorScheme="red">
+              <Button variant="solid" colorScheme="red" onClick={coba}>
                 Tambahkan ke keranjang
               </Button>
             </CardFooter>

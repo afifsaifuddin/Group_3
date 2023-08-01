@@ -3,12 +3,12 @@ import React from "react";
 
 export const Cart = () => {
   return (
-    <Box>
+    <Box bg={"red.400"} width={"20vw"} ml={"20px"}>
       <Stack alignItems={"center"}>
-        <Box> 
+        <Box>
           <Text> ini keranjang</Text>
         </Box>
-        <Box mt={"80vh"}>
+        <Box mt={"70vh"}>
           <Button px={"100px"}>Bayar</Button>
         </Box>
       </Stack>
