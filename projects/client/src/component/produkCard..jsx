@@ -27,8 +27,12 @@ export const CardProduk = ({ produk }) => {
   if (!produk) return <></>;
   return (
     <Flex>
-      <Box width={"600px"} borderRadius={"8px"}>
-        <Card direction={{ base: "column", sm: "row" }}>
+      <Box width={"580px"} borderRadius={"8px"}>
+        <Card
+          direction={{ base: "column", sm: "row" }}
+          border={"2px solid #FC2947"}
+          shadow={"xl"}
+        >
           <Image
             loading="lazy"
             objectFit="cover"
@@ -53,7 +57,7 @@ export const CardProduk = ({ produk }) => {
             <CardFooter>
               <Button
                 variant="solid"
-                colorScheme="red"
+                bgColor={"#FC2947"}
                 onClick={handleAddToCart}
               >
                 Tambahkan ke keranjang
