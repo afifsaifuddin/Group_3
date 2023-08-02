@@ -7,8 +7,9 @@ export const Home = () => {
   return (
     <Box>
       <Navbar />
-
-      <Sidebar />
+      <Box width={"100%"}>
+        <Sidebar />
+      </Box>
     </Box>
   );
 };

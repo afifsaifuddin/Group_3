@@ -12,11 +12,16 @@ export const Searchbar = () => {
   return (
     <Box>
       <Flex w={"100%"} mt={"10px"}>
-        <InputGroup>
+        <InputGroup bg={"white"}>
           <InputLeftElement pointerEvents="none">
             <BiSearchAlt color="gray.300" />
           </InputLeftElement>
-          <Input type="search" placeholder="Cari..." />
+          <Input
+            focusBorderColor="#FC2947"
+            type="search"
+            placeholder="Cari..."
+            borderColor={"black"}
+          />
         </InputGroup>
       </Flex>
     </Box>

@@ -60,7 +60,7 @@ export default function Signin() {
         flexDirection="column"
         width="100wh"
         height="100vh"
-        backgroundColor="#2D4356"
+        backgroundColor="#FC2947"
         justifyContent="center"
         alignItems="center"
       >
@@ -70,8 +70,8 @@ export default function Signin() {
           justifyContent="center"
           alignItems="center"
         >
-          <Avatar bg="#D71313" />
-          <Heading color="#D71313">Welcome</Heading>
+          <Avatar bg="black" />
+          <Heading color="black">Welcome</Heading>
           <Box minW={{ base: "90%", md: "468px" }}>
             <form onSubmit={formik.handleSubmit}>
               <Stack
@@ -97,7 +97,7 @@ export default function Signin() {
                       id="username"
                       type="text"
                       placeholder="username"
-                      focusBorderColor="#FD8A8A"
+                      focusBorderColor="#FC2947"
                       onChange={formik.handleChange}
                       value={formik.values.username}
                     />
@@ -123,7 +123,7 @@ export default function Signin() {
                       id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Password"
-                      focusBorderColor="#FD8A8A"
+                      focusBorderColor="#FC2947"
                       onChange={formik.handleChange}
                       value={formik.values.password}
                     />
@@ -150,7 +150,7 @@ export default function Signin() {
                     <Button
                       variant={""}
                       color={"black "}
-                      _hover={{ color: "#FD8A8A" }}
+                      _hover={{ color: "#FC2947" }}
                       onClick={() => {
                         onOpen();
                       }}
@@ -163,7 +163,7 @@ export default function Signin() {
                   borderRadius={5}
                   type="submit"
                   variant="solid"
-                  bgColor={"#FF7878"}
+                  bgColor={"#FC2947"}
                   width="full"
                 >
                   Login

@@ -51,8 +51,6 @@ export const Signinreducer = (values, navigate) => {
         username: values.username,
         password: values.password,
       });
-
-      console.log(res);
       const token = res.data.token;
       localStorage.setItem("token", token);
       dispatch(loginSuccess());
@@ -84,9 +82,9 @@ export const changePicture = (photo) => {
   return async () => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
-    formData.append("file", photo);
+    formData.append("imgProfile", photo);
     try {
-      const respon = await axios.post("http://localhost:8000/pos-kasir/ganti-avatar", formData, {
+      const respon = await axios.patch("http://localhost:8000/pos-kasir/ganti-avatar", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

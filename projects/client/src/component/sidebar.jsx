@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Stack } from "@chakra-ui/react";
+import { Box, Button, Flex, Stack, Text, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Welcome from "./welcome";
 import Produk from "./produk";
@@ -12,12 +12,14 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../redux/reducer/authreducer";
+import History from "./history";
+import { ImHistory } from "react-icons/im";
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
   const role = useSelector((state) => state.authreducer.user.role);
   const [activePage, setActivePage] = useState("home");
-  const renderPaage = () => {
+  const renderPage = () => {
     switch (activePage) {
       case "home":
         return <Welcome />;
@@ -25,6 +27,8 @@ export const Sidebar = () => {
         return <Produk />;
       case "admin":
         return <Admin />;
+      case "history":
+        return <History />;
       default:
         return null;
     }
@@ -35,49 +39,86 @@ export const Sidebar = () => {
   };
 
   return (
-    <Flex height={"100%"}>
-      <Box bg={"blue.500"}>
-        <Stack p={3} gap={"20px"}>
+    <Flex height={"100vh"} width={"100%"}>
+      <VStack p={3} gap={"20px"} bg={"#FC2947"} height={"100vh"} width={"6vw"}>
+        <Button
+          onClick={() => setActivePage("home")}
+          _hover={{ bgColor: "white" }}
+          variant={""}
+          size={"50px"}
+          p={1}
+        >
+          <Stack>
+            <GoHome size={"75px"} />
+            <Text mt={-3} fontWeight={"bold"}>
+              Home
+            </Text>
+          </Stack>
+        </Button>
+        <Button
+          onClick={() => setActivePage("produk")}
+          _hover={{ bgColor: "white" }}
+          variant={""}
+          size={"50px"}
+          p={1}
+        >
+          <Stack>
+            <MdProductionQuantityLimits size={"75px"} />
+            <Text mt={-3} fontWeight={"bold"}>
+              Produk
+            </Text>
+          </Stack>
+        </Button>
+        <Button
+          onClick={() => setActivePage("history")}
+          _hover={{ bgColor: "white" }}
+          variant={""}
+          size={"50px"}
+          p={1}
+        >
+          <Stack>
+            <ImHistory size={"75px"} />
+            <Text mt={-3} fontWeight={"bold"}>
+              History
+            </Text>
+          </Stack>
+        </Button>
+        {role === "admin" ? (
           <Button
-            onClick={() => setActivePage("home")}
-            _hover={{ bgColor: "blue.700" }}
+            onClick={() => setActivePage("admin")}
+            _hover={{ bgColor: "white" }}
             variant={""}
             size={"50px"}
+            p={1}
           >
-            <GoHome size={"100px"} />
+            <Stack>
+              <MdOutlineAdminPanelSettings size={"75px"} />
+              <Text mt={-3} fontWeight={"bold"}>
+                Admin
+              </Text>
+            </Stack>
           </Button>
-          <Button
-            onClick={() => setActivePage("produk")}
-            _hover={{ bgColor: "blue.700" }}
-            variant={""}
-            size={"50px"}
-          >
-            <MdProductionQuantityLimits size={"100px"} />
-          </Button>
-          {role === "admin" ? (
-            <Button
-              onClick={() => setActivePage("admin")}
-              _hover={{ bgColor: "blue.700" }}
-              variant={""}
-              size={"50px"}
-            >
-              <MdOutlineAdminPanelSettings size={"100px"} />
-            </Button>
-          ) : null}
-          <Box mt={"40vh"}>
-            <Button
-              onClick={handleLogout}
-              _hover={{ bgColor: "blue.700" }}
-              variant={""}
-              size={"50px"}
-            >
-              <MdLogout size={"100px"} />
-            </Button>
-          </Box>
-        </Stack>
-      </Box>
-      <Box bgColor={"green.100"} w={"100%"}>
-        {renderPaage()}
+        ) : null}
+
+        <Button
+          onClick={handleLogout}
+          _hover={{ bgColor: "white" }}
+          variant={""}
+          size={"50px"}
+          mt={"75vh"}
+          position={"absolute"}
+          p={1}
+        >
+          <Stack>
+            <MdLogout size={"75px"} />
+            <Text mt={-3} fontWeight={"bold"}>
+              Logout
+            </Text>
+          </Stack>
+        </Button>
+      </VStack>
+      <Box bgColor={"white"} width={"95%"}>
+        {renderPage()}
       </Box>
     </Flex>
   );
