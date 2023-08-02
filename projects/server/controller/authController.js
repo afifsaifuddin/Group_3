@@ -17,10 +17,7 @@ const sendEmail = async (result) => {
     expiresIn: "1h",
   });
   const redirect = `http://localhost:3000/resetpassword/${token}`;
-  const data = await fs.readFile(
-    path.resolve(__dirname, "../emails/forgotpassword.html"),
-    "utf-8"
-  );
+  const data = await fs.readFile(path.resolve(__dirname, "../emails/forgotpassword.html"), "utf-8");
   const tesCompile = handlebars.compile(data);
   const tempResult = tesCompile({ redirect });
 
@@ -32,10 +29,7 @@ const sendEmail = async (result) => {
 };
 
 const kirimEmailRegister = async (email, username) => {
-  const data = await fs.readFile(
-    path.resolve(__dirname, "../emails/registercashier.html"),
-    "utf-8"
-  );
+  const data = await fs.readFile(path.resolve(__dirname, "../emails/registercashier.html"), "utf-8");
   const tesCompile = handlebars.compile(data);
   const tempResult = tesCompile({ email, username });
 
@@ -63,9 +57,7 @@ const authController = {
         expiresIn: "24h",
       });
 
-      return res
-        .status(200)
-        .json({ success: "login berhasil", token, cekUser });
+      return res.status(200).json({ success: "login berhasil", token, cekUser });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -95,12 +87,19 @@ const authController = {
     }
   },
 
+  getCashier: async (req, res) => {
+    try {
+      const result = await user.findAll();
+      return res.status(200).json({ message: "success", result });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  },
   resetPassword: async (req, res) => {
     const { id } = req.user;
     const { password, confirmPassword } = req.body;
     console.log(id, password, confirmPassword);
-    if (password !== confirmPassword)
-      return res.status(400).json({ message: "Password tidak sama" });
+    if (password !== confirmPassword) return res.status(400).json({ message: "Password tidak sama" });
 
     try {
       const salt = await bcrypt.genSalt(10);
@@ -128,9 +127,7 @@ const authController = {
         confirmpassword,
       });
       await kirimEmailRegister(email, username);
-      return res
-        .status(200)
-        .json({ success: "register berhasil", createkasir });
+      return res.status(200).json({ success: "register berhasil", createkasir });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -138,11 +135,10 @@ const authController = {
 
   updateActive: async (req, res) => {
     try {
-      const { id } = req.user;
+      const { id } = req.body;
       const { isActive } = req.body;
       await user.update({ isActive }, { where: { id } });
-      if (isActive)
-        return res.status(200).json({ message: "user sudah diaktifkan" });
+      if (isActive) return res.status(200).json({ message: "user sudah diaktifkan" });
 
       return res.status(200).json({ message: "user sudah di nonaktifkan" });
     } catch (err) {
