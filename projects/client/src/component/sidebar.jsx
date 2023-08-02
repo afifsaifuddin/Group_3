@@ -117,7 +117,7 @@ export const Sidebar = () => {
           </Stack>
         </Button>
       </VStack>
-      <Box bgColor={"gray.200"} width={"95%"}>
+      <Box bgColor={"white"} width={"95%"}>
         {renderPage()}
       </Box>
     </Flex>

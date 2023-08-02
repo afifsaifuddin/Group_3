@@ -78,9 +78,9 @@ export const changePicture = (photo) => {
   return async () => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
-    formData.append("file", photo);
+    formData.append("imgProfile", photo);
     try {
-      const respon = await axios.post(
+      const respon = await axios.patch(
         "http://localhost:8000/pos-kasir/ganti-avatar",
         formData,
         {
