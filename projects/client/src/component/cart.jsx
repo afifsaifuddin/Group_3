@@ -5,9 +5,9 @@ import CartItem from "./cartItem";
 
 export const Cart = () => {
   const cart = useSelector((state) => state.produkreducer.cart);
-
+  const findDuplicate = () => {};
   return (
-    <Box bgColor={"red.400"} mx={10} borderRadius={"8px"}>
+    <Box bgColor={"#FC2947"} borderRadius={"8px"} width={"20vw"} mx={5}>
       <Stack alignItems={"center"}>
         <Box>
           <Text fontWeight={"bold"} fontSize={"2xl"}>
@@ -20,8 +20,10 @@ export const Cart = () => {
             ))}
           </Stack>
         </Box>
-        <Box mt={"70vh"}>
-          <Button px={"100px"}>Bayar</Button>
+        <Box mt={"75vh"} pb={3}>
+          <Button bgColor={"white"} px={"100px"}>
+            Bayar
+          </Button>
         </Box>
       </Stack>
     </Box>

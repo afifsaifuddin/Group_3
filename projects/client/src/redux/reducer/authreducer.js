@@ -18,7 +18,8 @@ export const authreducer = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      const { id, username, email, role, isActive, imgProfile } = action.payload;
+      const { id, username, email, role, isActive, imgProfile } =
+        action.payload;
       state.user = {
         id,
         username,
@@ -70,6 +71,29 @@ export const cekLogin = () => {
       dispatch(setUser(res.data.cekUser));
     } catch (err) {
       alert(err.message);
+    }
+  };
+};
+export const changePicture = (photo) => {
+  return async () => {
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+    formData.append("file", photo);
+    try {
+      const respon = await axios.post(
+        "http://localhost:8000/pos-kasir/ganti-avatar",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("ganti avatas sukses");
+      document.location.href = "/home";
+    } catch (error) {
+      console.log(error);
+      alert("ganti avatas gagal");
     }
   };
 };

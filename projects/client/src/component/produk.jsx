@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Stack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import CardProduk from "./produkCard.";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,10 +18,15 @@ export const Produk = () => {
   return (
     <Flex mt={"20px"} ml={"20px"} justifyContent={"space-between"}>
       <Box>
-        <Flex wrap={"wrap"} gap={"20px"}>
-          {produk && produk.map((item) => <CardProduk key={item.id} produk={item} />)}
-        </Flex>
-        <Pagination page={page} index={index} setIndex={setIndex} />
+        <Stack>
+          <Flex wrap={"wrap"} gap={"20px"}>
+            {produk &&
+              produk.map((item) => <CardProduk key={item.id} produk={item} />)}
+          </Flex>
+          <Box position={"absolute"} mt={"75vh"} ml={"50vh"}>
+            <Pagination page={page} index={index} setIndex={setIndex} />
+          </Box>
+        </Stack>
       </Box>
       <Box>
         <Cart />

@@ -28,11 +28,12 @@ export const Pagination = ({ page, index, setIndex }) => {
       pageButtons.push(
         <Button
           key={pageNum}
-          variant="outline"
+          variant="solid"
           onClick={() => handlePageChange(pageNum)}
           isActive={index === pageNum}
           disabled={index === pageNum}
-          colorScheme="red">
+          bgColor={"#FC2947"}
+        >
           {pageNum}
         </Button>
       );
@@ -44,11 +45,11 @@ export const Pagination = ({ page, index, setIndex }) => {
   const pageButtons = renderPageButtons();
   return (
     <Flex justifyContent="center" marginTop="20px">
-      <Button onClick={handlePreviousPage} colorScheme="red">
+      <Button onClick={handlePreviousPage} bgColor="#FC2947">
         Previous
       </Button>
       {pageButtons}
-      <Button onClick={handleNextPage} colorScheme="red">
+      <Button onClick={handleNextPage} bgColor="#FC2947">
         Next
       </Button>
     </Flex>
