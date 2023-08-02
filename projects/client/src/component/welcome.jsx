@@ -5,9 +5,14 @@ export const Welcome = () => {
   return (
     <Flex justify={"space-evenly"}>
       <Box>
-        <Image src="" />
+        <Image
+          width={"40vw"}
+          height={"80vh"}
+          src="https://img.freepik.com/premium-vector/welcome-illustration-creative_633317-133.jpg?w=2000"
+          alt=""
+        />
       </Box>
-      <Box mt={"100px"}>
+      <Box mt={"250px"}>
         <Text fontWeight={"bold"} fontSize={"50px"}>
           Selamat Datang di
         </Text>

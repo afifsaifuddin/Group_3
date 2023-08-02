@@ -30,7 +30,7 @@ export const AvatarKasir = () => {
       >
         <Button
           ml={"10px"}
-          variant={""}
+          variant={"unstyled"}
           onClick={() => {
             onOpen();
           }}

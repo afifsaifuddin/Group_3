@@ -4,7 +4,7 @@ import Searchbar from "./searchbar";
 import AvatarKasir from "./badge";
 export const Navbar = () => {
   return (
-    <Box bgColor={"gray.200"} borderBottom={"3px solid #FC2947"}>
+    <Box bgColor={"white"} borderBottom={"3px solid #FC2947"}>
       <Flex justifyContent={"space-between"} p={3}>
         <Text
           fontWeight={"bold"}
