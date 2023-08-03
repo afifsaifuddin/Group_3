@@ -11,7 +11,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
-import Cart from "./cart";
 import { useDispatch } from "react-redux";
 import { setCart } from "../redux/reducer/produkreducer";
 
@@ -21,9 +20,6 @@ export const CardProduk = ({ produk }) => {
     dispatch(setCart(produk));
   };
 
-  const coba = () => {
-    console.log(produk);
-  };
   if (!produk) return <></>;
   return (
     <Flex>

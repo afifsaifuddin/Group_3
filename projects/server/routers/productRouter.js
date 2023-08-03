@@ -11,9 +11,9 @@ router.get("/", productController.getProdukQuery);
 router.get("/:id", productController.getProdukbyId);
 router.post(
   "/upload",
+  multerUpload.single("productImg"),
   verifyToken,
   cekRole,
-  multerUpload.single("productImg"),
   productValidator,
   resultValidation,
   productController.uploadProduk

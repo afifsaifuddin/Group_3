@@ -17,7 +17,6 @@ export const Pembayaran = ({ isOpen, onClose }) => {
   const [kembalian, setKembalian] = useState(0);
   const totalharga = useSelector((state) => state.produkreducer.totalharga);
   const handlepembayaran = () => {
-    // const cashValue = parseFloat(bayar);
     const total = bayar - totalharga;
     setKembalian(total);
   };
