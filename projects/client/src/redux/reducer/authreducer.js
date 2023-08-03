@@ -58,7 +58,7 @@ export const Signinreducer = (values, navigate) => {
       alert("Login Berhasil");
       navigate("/home");
     } catch (error) {
-      alert(error.message);
+      alert(error.response.data.message);
     }
   };
 };
@@ -74,6 +74,7 @@ export const cekLogin = () => {
       });
       dispatch(setUser(res.data.cekUser));
     } catch (err) {
+      console.log(err.message);
       alert(err.message);
     }
   };
@@ -129,6 +130,23 @@ export const udpateStatusCashier = (status, id) => {
         }
       );
       alert(res.data.message);
+    } catch (err) {
+      alert(err.response.data.message);
+    }
+  };
+};
+
+export const registerCashier = (data) => {
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.post("http://localhost:8000/pos-kasir/register", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert(res.data.message);
+      console.log(res.data.message);
     } catch (err) {
       alert(err.message);
     }

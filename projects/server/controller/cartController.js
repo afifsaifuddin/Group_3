@@ -1,4 +1,3 @@
-const { where } = require("sequelize");
 const db = require("../models");
 const cart = db.Cart;
 const cartItem = db.CartItem;
@@ -11,10 +10,7 @@ const cartController = {
       const belumSelesai = await cart.findAll({
         where: { userId: id, isDone: false },
       });
-      if (belumSelesai.length > 0)
-        return res
-          .status(400)
-          .json({ message: "selesaikan cart yang belum selesai" });
+      if (belumSelesai.length > 0) return res.status(400).json({ message: "selesaikan cart yang belum selesai" });
 
       const result = await cart.create({
         userId: id,
@@ -29,10 +25,8 @@ const cartController = {
   masukinItem: async (req, res) => {
     try {
       const item = await product.findByPk(req.params.id);
-      if (item.quantity < 1)
-        return res.status(400).json({ message: "stock habis" });
-      if (!item.isActive)
-        return res.status(400).json({ message: "produk sudah tidak terjual" });
+      if (item.quantity < 1) return res.status(400).json({ message: "stock habis" });
+      if (!item.isActive) return res.status(400).json({ message: "produk sudah tidak terjual" });
       const itemCart = await cartItem.findOne({
         where: { productId: req.params.id },
       });
@@ -45,16 +39,12 @@ const cartController = {
         });
       } else {
         if (itemCart.quantity >= item.quantity)
-          return res
-            .status(400)
-            .json({ message: `stock cuman ${item.quantity}` });
+          return res.status(400).json({ message: `stock cuman ${item.quantity}` });
 
         await itemCart.increment("quantity");
       }
       await req.cart.increment({ totalPrice: item.harga_produk });
-      return res
-        .status(200)
-        .json({ message: `${item.name} telah ditambahkan` });
+      return res.status(200).json({ message: `${item.name} telah ditambahkan` });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -72,10 +62,7 @@ const cartController = {
       }
 
       if (itemCart.quantity > 1) {
-        await cartItem.update(
-          { quantity: itemCart.quantity - 1 },
-          { where: { productId: req.params.id } }
-        );
+        await cartItem.update({ quantity: itemCart.quantity - 1 }, { where: { productId: req.params.id } });
       }
 
       await req.cart.decrement({ totalPrice: item.harga_produk });
@@ -100,10 +87,7 @@ const cartController = {
 
   checkOut: async (req, res) => {
     try {
-      const result = await cart.update(
-        { isDone: true },
-        { where: { id: req.cart.id } }
-      );
+      const result = await cart.update({ isDone: true }, { where: { id: req.cart.id } });
       return res.status(200).json({ message: "success", result });
     } catch (err) {
       return res.status(500).json({ message: err.message });

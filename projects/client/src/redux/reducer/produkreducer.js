@@ -13,8 +13,6 @@ const produkReducer = createSlice({
   initialState,
   reducers: {
     setProduk: (state, action) => {
-      console.log(action.payload);
-      console.log(...action.payload);
       state.produk = [...action.payload];
     },
     setCart: (state, action) => {
@@ -36,15 +34,16 @@ const produkReducer = createSlice({
       console.log(state.page);
     },
   },
+  setTransaction: (state, action) => {
+    state.transaction = [...action.payload];
+  },
 });
 
 export const getProduk =
   (page = 1) =>
   async (dispatch) => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/product/?page=${page}`
-      );
+      const res = await axios.get(`http://localhost:8000/product/?page=${page}`);
       dispatch(setProduk(res.data.result));
       dispatch(setPage(res.data.totalPage));
     } catch (error) {
@@ -60,15 +59,11 @@ export const updateProduk = (data, id, file) => {
     formData.append("data", JSON.stringify(data));
     console.log(formData);
     try {
-      const res = await axios.patch(
-        `http://localhost:8000/product/updateProduk/${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.patch(`http://localhost:8000/product/updateProduk/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       alert("Update Product Success");
     } catch (error) {
       alert("Update Product Failed");
@@ -85,15 +80,11 @@ export const createProduct = (data, file) => {
     console.log(data);
     console.log(formData);
     try {
-      const res = await axios.post(
-        "http://localhost:8000/product/upload",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.post("http://localhost:8000/product/upload", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       alert("Create Product Success");
     } catch (error) {
       alert("Create Product Failed");
@@ -101,6 +92,18 @@ export const createProduct = (data, file) => {
   };
 };
 
-export const { setProduk, setCart, setPage } = produkReducer.actions;
+export const createTransaction = (data) => async (dispatch) => {
+  try {
+    const res = await axios.post(
+      "http://localhost:8000/transaction/",
+      {},
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+    );
+    alert("transaction berhasil");
+  } catch (error) {
+    console.log(error);
+  }
+};
 
+export const { setProduk, setCart, setPage } = produkReducer.actions;
 export default produkReducer.reducer;
