@@ -51,6 +51,47 @@ export const getProduk =
     }
   };
 
+export const updateProduk = (data, id, file) => {
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+    formData.append("productImg", file);
+    formData.append("data", JSON.stringify(data));
+    console.log(formData);
+    try {
+      const res = await axios.patch(`http://localhost:8000/product/updateProduk/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Update Product Success");
+    } catch (error) {
+      alert("Update Product Failed");
+    }
+  };
+};
+
+export const createProduct = (data, file) => {
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+    formData.append("productImg", file);
+    formData.append("data", JSON.stringify(data));
+    console.log(data);
+    console.log(formData);
+    try {
+      const res = await axios.post("http://localhost:8000/product/upload", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Create Product Success");
+    } catch (error) {
+      alert("Create Product Failed");
+    }
+  };
+};
+
 export const createTransaction = (data) => async (dispatch) => {
   try {
     const res = await axios.post(
@@ -58,7 +99,6 @@ export const createTransaction = (data) => async (dispatch) => {
       {},
       { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
-
     alert("transaction berhasil");
   } catch (error) {
     console.log(error);

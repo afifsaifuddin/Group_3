@@ -1,6 +1,15 @@
-import { Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from "@chakra-ui/react";
 import React from "react";
 import AdminCashier from "./adminCashier";
+import AdminProduk from "./adminProduk";
 
 export const Admin = () => {
   return (
@@ -19,6 +28,11 @@ export const Admin = () => {
             <TabPanel>
               <Box>
                 <AdminCashier />
+              </Box>
+            </TabPanel>
+            <TabPanel>
+              <Box>
+                <AdminProduk />
               </Box>
             </TabPanel>
           </TabPanels>
