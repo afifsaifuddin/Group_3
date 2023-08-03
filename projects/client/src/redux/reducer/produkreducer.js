@@ -74,16 +74,15 @@ export const updateProduk = (data, id, file) => {
 export const createProduct = (data, file) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
+
     const formData = new FormData();
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
     formData.append("productImg", file);
-    formData.append("data", JSON.stringify(data));
-    console.log(data);
-    console.log(formData);
     try {
-      const res = await axios.post("http://localhost:8000/product/upload", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const res = await axios.post(`http://localhost:8000/product/upload`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       alert("Create Product Success");
     } catch (error) {

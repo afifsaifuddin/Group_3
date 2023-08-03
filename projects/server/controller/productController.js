@@ -10,14 +10,7 @@ const setPagination = (limit, page) => {
 
 const productController = {
   getProdukQuery: async (req, res) => {
-    const {
-      limit = 6,
-      page = 1,
-      order = "ASC",
-      orderBy = "createdAt",
-      categoryId,
-      name,
-    } = req.query;
+    const { limit = 6, page = 1, order = "ASC", orderBy = "createdAt", categoryId, name } = req.query;
 
     const where = { isActive: true };
     if (name) where.name = { [db.Sequelize.Op.like]: `%${name}%` };
@@ -52,18 +45,10 @@ const productController = {
 
   uploadProduk: async (req, res) => {
     try {
-      const {
-        name,
-        categoryId,
-        description,
-        modal_produk,
-        harga_produk,
-        quantity,
-        isActive,
-      } = req.body;
-      if (!req.file)
-        return res.status(400).json({ message: "file gamebar harus ada" });
-      console.log(1);
+      const { name, categoryId, description, modal_produk, harga_produk, quantity } = req.body;
+      console.log(req.file);
+      if (!req.file) return res.status(400).json({ message: "file gamebar harus ada" });
+      console.log(name, categoryId, description, modal_produk, harga_produk, quantity);
       const result = await product.create({
         name,
         categoryId,
@@ -73,7 +58,6 @@ const productController = {
         quantity,
         productImg: req.file.path,
       });
-      console.log(1);
 
       return res.status(200).json({ message: "success", result });
     } catch (err) {
@@ -83,14 +67,7 @@ const productController = {
 
   updateProduk: async (req, res) => {
     try {
-      const {
-        name,
-        categoryId,
-        description,
-        modal_produk,
-        harga_produk,
-        quantity,
-      } = req.body;
+      const { name, categoryId, description, modal_produk, harga_produk, quantity } = req.body;
 
       const item = await product.findOne({ where: { id: req.params.id } });
       const updateClause = {};
@@ -102,14 +79,11 @@ const productController = {
       if (quantity) updateClause.quantity = quantity;
       if (req.file) {
         fs.unlink(item.productImg, (err) => {
-          if (err)
-            res.status(500).json({ message: "Ubah gambar ada yang salah" });
+          if (err) res.status(500).json({ message: "Ubah gambar ada yang salah" });
         });
         updateClause.productImg = req.file.path;
       }
-      await product.update(updateClause, {
-        where: { id: req.params.id },
-      });
+      await product.update(updateClause, { where: { id: req.params.id } });
       return res.status(200).json({ message: "update berhasil" });
     } catch (err) {
       return res.status(500).json({ message: err.message });
@@ -120,13 +94,8 @@ const productController = {
     const { id } = req.params;
     try {
       db.sequelize.transaction(async (t) => {
-        await product.update(
-          { isActive: false },
-          { where: { id } },
-          { transaction: t }
-        );
-        if (isActive)
-          return res.status(200).json({ message: "produk telah diaktifkan" });
+        await product.update({ isActive: false }, { where: { id } }, { transaction: t });
+        if (isActive) return res.status(200).json({ message: "produk telah diaktifkan" });
 
         return req.status(200).json({ message: "produk telah dinonaktifkan" });
       });

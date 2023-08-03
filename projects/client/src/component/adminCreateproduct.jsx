@@ -52,19 +52,8 @@ export const AdminCreateproduct = () => {
           <ModalBody>
             <Flex gap={"20px"}>
               <Box>
-                <Image
-                  width={"20vw"}
-                  height={"40vh"}
-                  src={urlImage}
-                  mb={"10px"}
-                />
-                <Input
-                  type="file"
-                  id="image"
-                  variant={""}
-                  onChange={handleImage}
-                  alt="Product Image"
-                />
+                <Image width={"20vw"} height={"40vh"} src={urlImage} mb={"10px"} />
+                <Input type="file" id="image" variant={""} onChange={handleImage} alt="Product Image" />
               </Box>
               <Box>
                 <Text fontWeight={"bold"} mb={"10px"}>
