@@ -47,11 +47,6 @@ const AdminCashier = () => {
     dispatch(getCashiers());
   };
 
-  const handleRegisterButton = () => {
-    setModalData(<AdminCashierRegister onClose={onClose} onOpen={onOpen} />);
-    onOpen();
-  };
-
   return (
     <Box>
       <Flex justifyContent={"end"} mr={"100px"}>
