@@ -23,11 +23,13 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCashiers, udpateStatusCashier } from "../redux/reducer/authreducer";
+import AdminCashierRegister from "./adminCashierRegister";
 
 const AdminCashier = () => {
   const dispatch = useDispatch();
   const [modalCashier, setModalCashier] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalData, setModalData] = useState(<AdminCashierRegister onClose={onClose} onOpen={onOpen} />);
 
   useEffect(() => {
     dispatch(getCashiers());
@@ -45,12 +47,15 @@ const AdminCashier = () => {
     dispatch(getCashiers());
   };
 
+  const handleRegisterButton = () => {
+    setModalData(<AdminCashierRegister onClose={onClose} onOpen={onOpen} />);
+    onOpen();
+  };
+
   return (
     <Box>
       <Flex justifyContent={"end"} mr={"100px"}>
-        <Button colorScheme={"red"} mb={"20px"}>
-          Add New Cashier
-        </Button>
+        <AdminCashierRegister />
       </Flex>
       <Table>
         <Thead>

@@ -1,12 +1,12 @@
 import { Avatar, Box, Button, Flex, Stack, useDisclosure } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ChangeAvatar } from "./changeAvatar";
 
 export const AvatarKasir = () => {
   const { user } = useSelector((state) => state.authreducer);
   const { isOpen, onClose, onOpen } = useDisclosure();
-  console.log(user);
+  
   let imgProfile;
   if (user.imgProfile) imgProfile = "http://localhost:8000/" + user.imgProfile.replace(/\\/g, "/");
   return (

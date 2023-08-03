@@ -10,8 +10,7 @@ const verifyToken = async (req, res, next) => {
   try {
     token = token.split(" ")[1];
 
-    if (token === "null" || !token)
-      return res.status(401).send("access denied");
+    if (token === "null" || !token) return res.status(401).send("access denied");
     let verifiedUser = jwt.verify(token, process.env.JWT_KEY);
 
     if (!verifiedUser) return res.status(401).send("unauthorized request");
@@ -25,8 +24,7 @@ const verifyToken = async (req, res, next) => {
 const cekRole = async (req, res, next) => {
   const { id } = req.user;
   const cekUser = await db.User.findByPk(id);
-  if (cekUser.role != "admin")
-    return res.status(200).json({ message: "anda bukan admin" });
+  if (cekUser.role != "admin") return res.status(400).json({ message: "anda bukan admin" });
 
   next();
 };

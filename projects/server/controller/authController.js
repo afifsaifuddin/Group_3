@@ -6,7 +6,7 @@ const transporter = require("../helpers/transporter");
 const handlebars = require("handlebars");
 const fs = require("fs").promises;
 const path = require("path");
-
+const { Sequelize } = require("sequelize");
 const sendEmail = async (result) => {
   let payload = {
     id: result.id,
@@ -50,6 +50,9 @@ const authController = {
       if (!cekUser) {
         return res.status(500).json({ message: "Username tidak ditemukan!" });
       }
+      if (!cekUser.isActive)
+        return res.status(400).json({ message: "Akun Sudah di Nonaktifkan mohon kontak ke admin!" });
+
       const isValid = await bcrypt.compare(password, cekUser.password);
       if (!isValid) return res.status(404).json({ message: "password salah" });
       const payload = { id: cekUser.id, role: cekUser.role };
@@ -118,6 +121,17 @@ const authController = {
       if (password !== confirmpassword) {
         return res.status(400).json({ error: "Password tidak sama" });
       }
+      console.log(1);
+      if (!username || !email || !password || !confirmpassword) {
+        return res.status(400).json({ error: "Data tidak lengkap" });
+      }
+      console.log(username, email);
+
+      const cekUser = await user.findOne({ where: { [Sequelize.Op.or]: [{ username }, { email }] } });
+      if (cekUser) return res.status(400).json({ message: "user atau email sudah terdaftar" });
+
+      console.log(3);
+
       const salt = await bcrypt.genSalt(10);
       password = await bcrypt.hash(password, salt);
       const createkasir = await user.create({
@@ -127,16 +141,17 @@ const authController = {
         confirmpassword,
       });
       await kirimEmailRegister(email, username);
-      return res.status(200).json({ success: "register berhasil", createkasir });
-    } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return res.status(200).json({ message: "register berhasil", createkasir });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
     }
   },
 
   updateActive: async (req, res) => {
     try {
-      const { id } = req.body;
-      const { isActive } = req.body;
+      const { id, isActive } = req.body;
+      const profil = await user.findByPk(id);
+      if (profil.role === "admin") return res.status(400).json({ message: "Admin tidak bisa dinonaktifkan" });
       await user.update({ isActive }, { where: { id } });
       if (isActive) return res.status(200).json({ message: "user sudah diaktifkan" });
 
@@ -150,6 +165,7 @@ const authController = {
     try {
       const { id } = req.user;
       const profil = await user.findByPk(id);
+
       console.log(req.file);
       if (profil.imgProfile) {
         fs.unlink(profil.imgProfile, (err) => {
