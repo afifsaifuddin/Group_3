@@ -9,7 +9,6 @@ import {
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ChangeAvatar } from "./changeAvatar";
-import ColorModeToggle from "./colorMode";
 
 export const AvatarKasir = () => {
   const { user } = useSelector((state) => state.authreducer);

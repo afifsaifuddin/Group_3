@@ -34,6 +34,35 @@ const produkReducer = createSlice({
       }
       state.totalharga += action.payload.harga_produk;
     },
+    deleteItem: (state, action) => {
+      const productId = action.payload;
+      const existingItemIndex = state.cart.findIndex(
+        (item) => item.id === productId
+      );
+      if (existingItemIndex !== -1) {
+        // Jika item ditemukan dalam keranjang, hapus item tersebut
+        const deletedItem = state.cart[existingItemIndex];
+        state.totalharga -= deletedItem.harga_produk * deletedItem.quantity;
+        state.cart.splice(existingItemIndex, 1);
+      }
+    },
+    incrementQuantity: (state, action) => {
+      const productId = action.payload;
+      const existingItem = state.cart.find((item) => item.id === productId);
+      if (existingItem) {
+        existingItem.quantity += 1;
+        state.totalharga += existingItem.harga_produk;
+      }
+    },
+    decrementQuantity: (state, action) => {
+      const productId = action.payload;
+      const existingItem = state.cart.find((item) => item.id === productId);
+      if (existingItem && existingItem.quantity > 1) {
+        existingItem.quantity -= 1;
+        state.totalharga -= existingItem.harga_produk;
+      }
+    },
+
     setPage: (state, action) => {
       state.page = action.payload;
     },
@@ -67,9 +96,13 @@ export const updateProduk = (data, id, file) => {
       formData.append(key, data[key]);
     }
     try {
-      const res = await axios.patch(`http://localhost:8000/product/updateProduk/${id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.patch(
+        `http://localhost:8000/product/updateProduk/${id}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Update Product Success");
     } catch (error) {
       alert("Update Product Failed");
@@ -87,9 +120,13 @@ export const createProduct = (data, file) => {
     }
     formData.append("productImg", file);
     try {
-      const res = await axios.post(`http://localhost:8000/product/upload`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        `http://localhost:8000/product/upload`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Create Product Success");
     } catch (error) {
       alert("Create Product Failed");
@@ -97,31 +134,38 @@ export const createProduct = (data, file) => {
   };
 };
 
-export const createTransaction = (totalharga, itemCarts) => async (dispatch) => {
-  try {
-    const res = await axios.post(
-      "http://localhost:8000/transaction/",
-      { totalharga },
-      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-    );
-    const transactionId = res.data.result.id;
-    itemCarts.forEach(async (item) => {
-      try {
-        console.log(item.id, item.quantity, item.harga_produk);
-        const res = await axios.post(
-          "http://localhost:8000/transaction/item",
-          { item, transactionId },
-          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    });
-    alert("transaction berhasil");
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const createTransaction =
+  (totalharga, itemCarts) => async (dispatch) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/transaction/",
+        { totalharga },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      const transactionId = res.data.result.id;
+      itemCarts.forEach(async (item) => {
+        try {
+          console.log(item.id, item.quantity, item.harga_produk);
+          const res = await axios.post(
+            "http://localhost:8000/transaction/item",
+            { item, transactionId },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      });
+      alert("transaction berhasil");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const getCategory = () => async (dispatch) => {
   try {
@@ -150,5 +194,15 @@ export const getTransactionId = (id) => async (dispatch) => {
   }
 };
 
-export const { setProduk, setCart, setPage, setTransaction, setCategory } = produkReducer.actions;
+export const {
+  setProduk,
+  deleteItem,
+  setCart,
+  setPage,
+  setTransaction,
+  setCategory,
+  incrementQuantity,
+  decrementQuantity,
+} = produkReducer.actions;
+
 export default produkReducer.reducer;
