@@ -12,7 +12,8 @@ const productController = {
   getProdukQuery: async (req, res) => {
     const { limit = 6, page = 1, order = "ASC", orderBy = "createdAt", categoryId, name } = req.query;
 
-    const where = { isActive: true };
+    // const where = { isActive: true };
+    const where = {};
     if (name) where.name = { [db.Sequelize.Op.like]: `%${name}%` };
     if (categoryId) where.categoryId = categoryId;
 
@@ -67,8 +68,7 @@ const productController = {
 
   updateProduk: async (req, res) => {
     try {
-      const { name, categoryId, description, modal_produk, harga_produk, quantity } = req.body;
-
+      const { name, categoryId, description, modal_produk, harga_produk, quantity, isActive } = req.body;
       const item = await product.findOne({ where: { id: req.params.id } });
       const updateClause = {};
       if (name) updateClause.name = name;
@@ -77,6 +77,7 @@ const productController = {
       if (modal_produk) updateClause.modal_produk = modal_produk;
       if (harga_produk) updateClause.harga_produk = harga_produk;
       if (quantity) updateClause.quantity = quantity;
+      if (isActive) updateClause.isActive = isActive;
       if (req.file) {
         fs.unlink(item.productImg, (err) => {
           if (err) res.status(500).json({ message: "Ubah gambar ada yang salah" });

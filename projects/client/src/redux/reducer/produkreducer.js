@@ -7,6 +7,7 @@ const initialState = {
   category: [],
   totalharga: 0,
   page: 0,
+  transaction: [],
 };
 
 const produkReducer = createSlice({
@@ -35,11 +36,10 @@ const produkReducer = createSlice({
     },
     setPage: (state, action) => {
       state.page = action.payload;
-      console.log(state.page);
     },
-  },
-  setTransaction: (state, action) => {
-    state.transaction = [...action.payload];
+    setTransaction: (state, action) => {
+      state.transaction = [...action.payload];
+    },
   },
 });
 
@@ -63,18 +63,13 @@ export const updateProduk = (data, id, file) => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
     formData.append("productImg", file);
-    formData.append("data", JSON.stringify(data));
-    console.log(formData);
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
     try {
-      const res = await axios.patch(
-        `http://localhost:8000/product/updateProduk/${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.patch(`http://localhost:8000/product/updateProduk/${id}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       alert("Update Product Success");
     } catch (error) {
       alert("Update Product Failed");
@@ -92,13 +87,9 @@ export const createProduct = (data, file) => {
     }
     formData.append("productImg", file);
     try {
-      const res = await axios.post(
-        `http://localhost:8000/product/upload`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await axios.post(`http://localhost:8000/product/upload`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       alert("Create Product Success");
     } catch (error) {
       alert("Create Product Failed");
@@ -106,13 +97,26 @@ export const createProduct = (data, file) => {
   };
 };
 
-export const createTransaction = (data) => async (dispatch) => {
+export const createTransaction = (totalharga, itemCarts) => async (dispatch) => {
   try {
     const res = await axios.post(
       "http://localhost:8000/transaction/",
-      {},
+      { totalharga },
       { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
+    const transactionId = res.data.result.id;
+    itemCarts.forEach(async (item) => {
+      try {
+        console.log(item.id, item.quantity, item.harga_produk);
+        const res = await axios.post(
+          "http://localhost:8000/transaction/item",
+          { item, transactionId },
+          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    });
     alert("transaction berhasil");
   } catch (error) {
     console.log(error);
@@ -128,6 +132,15 @@ export const getCategory = () => async (dispatch) => {
   }
 };
 
-export const { setProduk, setCart, setPage, setCategory } =
-  produkReducer.actions;
+export const getTransaction = () => async (dispatch) => {
+  try {
+    const res = await axios.get("http://localhost:8000/transaction/");
+    dispatch(setTransaction(res.data.result));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const { setProduk, setCart, setPage, setTransaction, setCategory } = produkReducer.actions;
+
 export default produkReducer.reducer;

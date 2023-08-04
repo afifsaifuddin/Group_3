@@ -15,7 +15,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { createProduct } from "../redux/reducer/produkreducer";
+import { createProduct, getProduk } from "../redux/reducer/produkreducer";
 import { useDispatch } from "react-redux";
 
 export const AdminCreateproduct = () => {
@@ -27,7 +27,7 @@ export const AdminCreateproduct = () => {
     const avaURL = URL.createObjectURL(file);
     setUrlImage(avaURL);
   };
-  const handleCreate = () => {
+  const handleCreate = async () => {
     const data = {
       name: document.getElementById("namaProduk").value,
       description: document.getElementById("deskripsi").value,
@@ -37,7 +37,8 @@ export const AdminCreateproduct = () => {
       quantity: document.getElementById("quantity").value,
     };
     const file = document.getElementById("image").files[0];
-    dispatch(createProduct(data, file));
+    await dispatch(createProduct(data, file));
+    await dispatch(getProduk());
   };
   return (
     <Box>
@@ -52,7 +53,14 @@ export const AdminCreateproduct = () => {
           <ModalBody>
             <Flex gap={"20px"}>
               <Box>
-                <Image width={"20vw"} height={"40vh"} src={urlImage} mb={"10px"} />
+                <Image
+                  width={"20vw"}
+                  height={"40vh"}
+                  src={urlImage}
+                  mb={"10px"}
+                  objectFit={"cover"}
+                  overflow={"hidden"}
+                />
                 <Input type="file" id="image" variant={""} onChange={handleImage} alt="Product Image" />
               </Box>
               <Box>

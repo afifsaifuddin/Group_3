@@ -5,6 +5,7 @@ import Home from "./pages/home";
 import { Resetpassword } from "./pages/resetpassword";
 import CekLogin from "./middleware/cekLogin";
 function App() {
+  
   return (
     <>
       <CekLogin>

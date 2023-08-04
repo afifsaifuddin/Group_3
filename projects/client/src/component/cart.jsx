@@ -1,15 +1,4 @@
-import {
-  Box,
-  Button,
-  Stack,
-  Table,
-  Tbody,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, Stack, Table, Tbody, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { useSelector } from "react-redux";
 import CartItem from "./cartItem";
@@ -43,8 +32,7 @@ export const Cart = () => {
           px={"100px"}
           onClick={() => {
             onOpen();
-          }}
-        >
+          }}>
           Bayar
         </Button>
       </Box>
