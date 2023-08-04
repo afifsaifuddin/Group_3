@@ -23,7 +23,7 @@ export const CardProduk = ({ produk }) => {
   if (!produk) return <></>;
   return (
     <Flex>
-      <Box width={"580px"} borderRadius={"8px"}>
+      <Box width={"500px"} borderRadius={"8px"}>
         <Card
           direction={{ base: "column", sm: "row" }}
           border={"2px solid #FC2947"}

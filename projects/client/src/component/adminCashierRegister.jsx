@@ -20,7 +20,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import * as Yup from "yup";
 import { getCashiers, registerCashier } from "../redux/reducer/authreducer";
+import { useFormik } from "formik";
 
 const AdminCashierRegister = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -40,7 +42,33 @@ const AdminCashierRegister = () => {
     await dispatch(registerCashier(data));
     await dispatch(getCashiers());
   };
-
+  // const regisCashierScheme = Yup.object().shape({
+  //   username: Yup.string().required("Username harus diisi"),
+  //   email: Yup.string()
+  //     .required("Email harus diisi")
+  //     .email("Email harus valid"),
+  //   password: Yup.string()
+  //     .required("Password harus diisi")
+  //     .matches(
+  //       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{6,}$/,
+  //       "Password minimal 6 karakter, 1 symbol, dan 1 huruf kapital"
+  //     ),
+  //   confirmpassword: Yup.string()
+  //     .required("Konfirmasi Password harus diisi")
+  //     .oneOf([Yup.ref("password"), null], "Password tidak sama"),
+  // });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     username: "",
+  //     email: "",
+  //     password: "",
+  //     confirmpassword: "",
+  //   },
+  //   validationSchema: regisCashierScheme,
+  //   onSubmit: (values) => {
+  //     handleSubmit();
+  //   },
+  // });
   return (
     <Box>
       <Button colorScheme="red" onClick={() => handleClick()}>

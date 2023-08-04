@@ -1,7 +1,6 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import AvatarKasir from "./badge";
-import ColorModeToggle from "./colorMode";
 export const Navbar = () => {
   return (
     <Box bgColor={"white"} borderBottom={"3px solid #FC2947"}>
@@ -19,7 +18,6 @@ export const Navbar = () => {
             Cell
           </Text>
         </Flex>
-        <ColorModeToggle />
         <AvatarKasir />
       </Flex>
     </Box>
