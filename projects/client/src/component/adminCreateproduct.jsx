@@ -14,7 +14,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createProduct, getProduk } from "../redux/reducer/produkreducer";
 import { useDispatch } from "react-redux";
 
@@ -38,8 +38,9 @@ export const AdminCreateproduct = () => {
     };
     const file = document.getElementById("image").files[0];
     await dispatch(createProduct(data, file));
-    await dispatch(getProduk());
+    await dispatch(getProduk({}));
   };
+
   return (
     <Box>
       <Button colorScheme={"red"} mb={"20px"} onClick={onOpen}>

@@ -83,7 +83,7 @@ const AdminCashier = () => {
           ))}
         </Tbody>
       </Table>
-      <Modal isOpen={isOpen} onClose={onClose} size={"5xl"}>
+      <Modal isOpen={isOpen} onClose={onClose} size={"5xl"} isCentered>
         <ModalOverlay />
         <ModalContent pb={"20px"}>
           <ModalHeader>Edit Cashier</ModalHeader>
@@ -101,13 +101,13 @@ const AdminCashier = () => {
               <Tbody>
                 <Tr>
                   <Td>
-                    <Input value={modalCashier.username} />
+                    <Input placeholder={modalCashier.username} />
                   </Td>
                   <Td>
-                    <Input value={modalCashier.email} />
+                    <Input placeholder={modalCashier.email} />
                   </Td>
                   <Td>
-                    <Input value={modalCashier.role} />
+                    <Input placeholder={modalCashier.role} />
                   </Td>
                   <Td>
                     <Switch isChecked={modalCashier.isActive} onChange={() => switchChange(!modalCashier.isActive)} />

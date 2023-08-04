@@ -10,7 +10,7 @@ const setPagination = (limit, page) => {
 
 const productController = {
   getProdukQuery: async (req, res) => {
-    const { limit = 6, page = 1, order = "ASC", orderBy = "createdAt", categoryId, name } = req.query;
+    const { limit = 9, page = 1, order = "ASC", orderBy = "createdAt", categoryId, name } = req.query;
 
     // const where = { isActive: true };
     const where = {};

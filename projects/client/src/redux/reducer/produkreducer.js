@@ -136,11 +136,19 @@ export const getTransaction = () => async (dispatch) => {
   try {
     const res = await axios.get("http://localhost:8000/transaction/");
     dispatch(setTransaction(res.data.result));
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getTransactionId = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`http://localhost:8000/transaction/${id}`);
+    return res.data.result;
+  } catch (err) {
+    console.log(err);
   }
 };
 
 export const { setProduk, setCart, setPage, setTransaction, setCategory } = produkReducer.actions;
-
 export default produkReducer.reducer;

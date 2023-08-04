@@ -45,11 +45,11 @@ export const AdminProduk = () => {
       modal_produk: document.getElementById("hargaBeli").value,
       harga_produk: document.getElementById("hargaJual").value,
       quantity: document.getElementById("quantity").value,
-      isActive: modalProduk.isActive
+      isActive: modalProduk.isActive,
     };
     const file = document.getElementById("image").files[0];
     await dispatch(updateProduk(data, modalProduk.id, file));
-    await dispatch(getProduk());
+    await dispatch(getProduk({}));
   };
 
   const switchChange = (e) => {
@@ -57,7 +57,7 @@ export const AdminProduk = () => {
   };
 
   useEffect(() => {
-    dispatch(getProduk());
+    dispatch(getProduk({}));
   }, []);
 
   return (
@@ -111,7 +111,14 @@ export const AdminProduk = () => {
           <ModalBody>
             <Flex gap={"30px"}>
               <Box>
-                <Image width={"20vw"} height={"40vh"} src={urlImage} mb={"10px"} />
+                <Image
+                  width={"20vw"}
+                  height={"40vh"}
+                  src={urlImage}
+                  mb={"10px"}
+                  objectFit={"cover"}
+                  overflow={"hidden"}
+                />
                 <Input type="file" id="image" variant={""} onChange={handleImage} />
               </Box>
               <Box>
