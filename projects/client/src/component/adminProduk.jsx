@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Switch,
   Table,
   Tbody,
   Td,
@@ -44,9 +45,15 @@ export const AdminProduk = () => {
       modal_produk: document.getElementById("hargaBeli").value,
       harga_produk: document.getElementById("hargaJual").value,
       quantity: document.getElementById("quantity").value,
+      isActive: modalProduk.isActive
     };
     const file = document.getElementById("image").files[0];
-    dispatch(updateProduk(data, modalProduk.id, file));
+    await dispatch(updateProduk(data, modalProduk.id, file));
+    await dispatch(getProduk());
+  };
+
+  const switchChange = (e) => {
+    setModalProduk({ ...modalProduk, isActive: e });
   };
 
   useEffect(() => {
@@ -96,13 +103,13 @@ export const AdminProduk = () => {
           ))}
         </Tbody>
       </Table>
-      <Modal isOpen={isOpen} onClose={onClose} onOpen={onOpen} size={"2xl"}>
+      <Modal isOpen={isOpen} onClose={onClose} onOpen={onOpen} size={"3xl"}>
         <ModalOverlay />
         <ModalCloseButton />
         <ModalContent>
           <ModalHeader>Edit Produk</ModalHeader>
           <ModalBody>
-            <Flex gap={"20px"}>
+            <Flex gap={"30px"}>
               <Box>
                 <Image width={"20vw"} height={"40vh"} src={urlImage} mb={"10px"} />
                 <Input type="file" id="image" variant={""} onChange={handleImage} />
@@ -128,6 +135,7 @@ export const AdminProduk = () => {
                   Quantity :{" "}
                 </Text>
                 <Input id="quantity" mb={"10px"} placeholder={modalProduk.quantity} />
+                <Switch isChecked={modalProduk.isActive} onChange={() => switchChange(!modalProduk.isActive)} />
               </Box>
             </Flex>
             <ModalFooter>

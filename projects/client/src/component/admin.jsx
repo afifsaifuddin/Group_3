@@ -1,20 +1,12 @@
-import {
-  Box,
-  Heading,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from "@chakra-ui/react";
+import { Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import React from "react";
 import AdminCashier from "./adminCashier";
 import AdminProduk from "./adminProduk";
 
 export const Admin = () => {
   return (
-    <Box ml={"20px"}>
-      <Box border={"1px"} mt={"10px"} p={"10px"} mb={"10px"}>
+    <Box ml={"20px"} mt={"10px"}>
+      <Box border={"1px"} p={"10px"} mb={"10px"}>
         <Heading>Cashier App - Admin Dashboard</Heading>
       </Box>
       <Box>

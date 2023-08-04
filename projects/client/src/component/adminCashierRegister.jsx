@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { registerCashier } from "../redux/reducer/authreducer";
+import { getCashiers, registerCashier } from "../redux/reducer/authreducer";
 
 const AdminCashierRegister = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,14 +30,15 @@ const AdminCashierRegister = () => {
     onOpen();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const data = {
       username: document.getElementById("username").value,
       email: document.getElementById("email").value,
       password: document.getElementById("password").value,
       confirmpassword: document.getElementById("confirmpassword").value,
     };
-    dispatch(registerCashier(data));
+    await dispatch(registerCashier(data));
+    await dispatch(getCashiers());
   };
 
   return (
