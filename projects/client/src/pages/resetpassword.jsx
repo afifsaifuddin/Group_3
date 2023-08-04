@@ -6,6 +6,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
+  Image,
   Input,
   InputGroup,
   InputLeftElement,
@@ -70,21 +71,23 @@ export const Resetpassword = () => {
   return (
     <Box>
       <Flex
-        flexDirection="column"
+        flexDirection="row"
         width="100wh"
         height="100vh"
-        backgroundColor="gray.200"
+        backgroundColor="gray.400"
         justifyContent="center"
         alignItems="center"
       >
+        <Box w={"50%"}>
+          <Image src="https://drive.google.com/uc?export=view&id=1ti-pm1H-S9qSEK7ld3gCfMv5y6QuiaNS" />
+        </Box>
         <Stack
           flexDir="column"
           mb="2"
           justifyContent="center"
           alignItems="center"
         >
-          <Heading color="teal.400">Reset Password</Heading>
-          <Box minW={{ base: "90%", md: "468px" }}>
+          <Box minW={{ base: "90%", md: "468px" }} shadow={"xl"}>
             <form onSubmit={formik.handleSubmit}>
               <Stack
                 spacing={4}
@@ -97,6 +100,9 @@ export const Resetpassword = () => {
                 <FormControl
                   isInvalid={formik.touched.password && formik.errors.password}
                 >
+                  <Heading color="#FC2947" pb={5}>
+                    Reset Password
+                  </Heading>
                   <FormLabel htmlFor="password" fontWeight={"bold"}>
                     Password
                   </FormLabel>
@@ -170,8 +176,8 @@ export const Resetpassword = () => {
                   borderRadius={5}
                   type="submit"
                   variant="solid"
-                  colorScheme="teal"
                   width="full"
+                  bgColor={"#FC2947"}
                 >
                   Reset
                 </Button>

@@ -14,6 +14,7 @@ import {
   InputLeftElement,
   InputRightElement,
   Stack,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
@@ -60,7 +61,7 @@ export default function Signin() {
       flexDirection="row"
       width="100wh"
       height="100vh"
-      backgroundColor="white"
+      backgroundColor="gray.400"
       justifyContent="center"
       alignItems="center"
     >
@@ -74,9 +75,7 @@ export default function Signin() {
           justifyContent="center"
           alignItems="center"
         >
-          <Avatar bg="black" />
-          <Heading color="black">Welcome</Heading>
-          <Box minW={{ base: "90%", md: "468px" }}>
+          <Box minW={{ base: "90%", md: "468px" }} shadow={"xl"}>
             <form onSubmit={formik.handleSubmit}>
               <Stack
                 spacing={4}
@@ -86,6 +85,14 @@ export default function Signin() {
                 borderRadius={10}
                 padding={10}
               >
+                <Text
+                  fontSize={"5xl"}
+                  align={"center"}
+                  fontWeight={"bold"}
+                  color="#FC2947"
+                >
+                  Welcome
+                </Text>
                 <FormControl
                   isInvalid={formik.touched.username && formik.errors.username}
                 >
