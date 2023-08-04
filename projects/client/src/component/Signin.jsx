@@ -8,6 +8,7 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  Image,
   Input,
   InputGroup,
   InputLeftElement,
@@ -55,15 +56,18 @@ export default function Signin() {
   });
 
   return (
-    <Box>
-      <Flex
-        flexDirection="column"
-        width="100wh"
-        height="100vh"
-        backgroundColor="#FC2947"
-        justifyContent="center"
-        alignItems="center"
-      >
+    <Flex
+      flexDirection="row"
+      width="100wh"
+      height="100vh"
+      backgroundColor="white"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Box w={"50%"}>
+        <Image src="https://drive.google.com/uc?export=view&id=1P5t80_nNZZ5NEmfXmWnFu8ZyrY784yFf"></Image>
+      </Box>
+      <Box>
         <Stack
           flexDir="column"
           mb="2"
@@ -172,8 +176,8 @@ export default function Signin() {
             </form>
           </Box>
         </Stack>
-      </Flex>
+      </Box>
       <Modalforgotpass isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
-    </Box>
+    </Flex>
   );
 }

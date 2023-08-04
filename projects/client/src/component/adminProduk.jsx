@@ -50,7 +50,7 @@ export const AdminProduk = () => {
   };
 
   useEffect(() => {
-    dispatch(getProduk());
+    dispatch(getProduk({}));
   }, []);
 
   return (
@@ -86,9 +86,13 @@ export const AdminProduk = () => {
                   colorScheme="red"
                   onClick={() => {
                     setModalProduk(item);
-                    setUrlImage(`http://localhost:8000/` + item.productImg.replace(/\\/g, "/"));
+                    setUrlImage(
+                      `http://localhost:8000/` +
+                        item.productImg.replace(/\\/g, "/")
+                    );
                     onOpen();
-                  }}>
+                  }}
+                >
                   EDIT
                 </Button>
               </Td>
@@ -104,30 +108,60 @@ export const AdminProduk = () => {
           <ModalBody>
             <Flex gap={"20px"}>
               <Box>
-                <Image width={"20vw"} height={"40vh"} src={urlImage} mb={"10px"} />
-                <Input type="file" id="image" variant={""} onChange={handleImage} />
+                <Image
+                  width={"20vw"}
+                  height={"40vh"}
+                  src={urlImage}
+                  mb={"10px"}
+                />
+                <Input
+                  type="file"
+                  id="image"
+                  variant={""}
+                  onChange={handleImage}
+                />
               </Box>
               <Box>
                 <Text fontWeight={"bold"} mb={"10px"}>
                   Nama Produk :{" "}
                 </Text>
-                <Input id="namaProduk" mb={"10px"} placeholder={modalProduk.name} />
+                <Input
+                  id="namaProduk"
+                  mb={"10px"}
+                  placeholder={modalProduk.name}
+                />
                 <Text fontWeight={"bold"} mb={"10px"}>
                   Deskripsi :{" "}
                 </Text>
-                <Input id="deskripsi" mb={"10px"} placeholder={modalProduk.description} />
+                <Input
+                  id="deskripsi"
+                  mb={"10px"}
+                  placeholder={modalProduk.description}
+                />
                 <Text fontWeight={"bold"} mb={"10px"}>
                   Harga Beli :{" "}
                 </Text>
-                <Input id="hargaBeli" mb={"10px"} placeholder={modalProduk.modal_produk} />
+                <Input
+                  id="hargaBeli"
+                  mb={"10px"}
+                  placeholder={modalProduk.modal_produk}
+                />
                 <Text fontWeight={"bold"} mb={"10px"}>
                   Harga Jual :{" "}
                 </Text>
-                <Input id="hargaJual" mb={"10px"} placeholder={modalProduk.harga_produk} />
+                <Input
+                  id="hargaJual"
+                  mb={"10px"}
+                  placeholder={modalProduk.harga_produk}
+                />
                 <Text fontWeight={"bold"} mb={"10px"}>
                   Quantity :{" "}
                 </Text>
-                <Input id="quantity" mb={"10px"} placeholder={modalProduk.quantity} />
+                <Input
+                  id="quantity"
+                  mb={"10px"}
+                  placeholder={modalProduk.quantity}
+                />
               </Box>
             </Flex>
             <ModalFooter>

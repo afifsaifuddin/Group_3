@@ -4,6 +4,7 @@ const axios = require("axios");
 const initialState = {
   produk: [],
   cart: [],
+  category: [],
   totalharga: 0,
   page: 0,
 };
@@ -14,6 +15,9 @@ const produkReducer = createSlice({
   reducers: {
     setProduk: (state, action) => {
       state.produk = [...action.payload];
+    },
+    setCategory: (state, action) => {
+      state.category = [...action.payload];
     },
     setCart: (state, action) => {
       console.log(state.cart);
@@ -40,10 +44,13 @@ const produkReducer = createSlice({
 });
 
 export const getProduk =
-  (page = 1) =>
+  ({ page = 1, name = "", category = "", order = "ASC" }) =>
   async (dispatch) => {
+    console.log(name);
     try {
-      const res = await axios.get(`http://localhost:8000/product/?page=${page}`);
+      const res = await axios.get(
+        `http://localhost:8000/product/?page=${page}&name=${name}&categoryId=${category}&order=${order}`
+      );
       dispatch(setProduk(res.data.result));
       dispatch(setPage(res.data.totalPage));
     } catch (error) {
@@ -59,11 +66,15 @@ export const updateProduk = (data, id, file) => {
     formData.append("data", JSON.stringify(data));
     console.log(formData);
     try {
-      const res = await axios.patch(`http://localhost:8000/product/updateProduk/${id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.patch(
+        `http://localhost:8000/product/updateProduk/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert("Update Product Success");
     } catch (error) {
       alert("Update Product Failed");
@@ -81,9 +92,13 @@ export const createProduct = (data, file) => {
     }
     formData.append("productImg", file);
     try {
-      const res = await axios.post(`http://localhost:8000/product/upload`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        `http://localhost:8000/product/upload`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Create Product Success");
     } catch (error) {
       alert("Create Product Failed");
@@ -104,5 +119,15 @@ export const createTransaction = (data) => async (dispatch) => {
   }
 };
 
-export const { setProduk, setCart, setPage } = produkReducer.actions;
+export const getCategory = () => async (dispatch) => {
+  try {
+    const res = await axios.get("http://localhost:8000/category/");
+    dispatch(setCategory(res.data.result));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const { setProduk, setCart, setPage, setCategory } =
+  produkReducer.actions;
 export default produkReducer.reducer;
