@@ -4,6 +4,7 @@ const axios = require("axios");
 const initialState = {
   produk: [],
   cart: [],
+  category: [],
   totalharga: 0,
   page: 0,
   transaction: [],
@@ -15,6 +16,9 @@ const produkReducer = createSlice({
   reducers: {
     setProduk: (state, action) => {
       state.produk = [...action.payload];
+    },
+    setCategory: (state, action) => {
+      state.category = [...action.payload];
     },
     setCart: (state, action) => {
       console.log(state.cart);
@@ -40,10 +44,13 @@ const produkReducer = createSlice({
 });
 
 export const getProduk =
-  (page = 1) =>
+  ({ page = 1, name = "", category = "", order = "ASC" }) =>
   async (dispatch) => {
+    console.log(name);
     try {
-      const res = await axios.get(`http://localhost:8000/product/?page=${page}`);
+      const res = await axios.get(
+        `http://localhost:8000/product/?page=${page}&name=${name}&categoryId=${category}&order=${order}`
+      );
       dispatch(setProduk(res.data.result));
       dispatch(setPage(res.data.totalPage));
     } catch (error) {
@@ -116,6 +123,15 @@ export const createTransaction = (totalharga, itemCarts) => async (dispatch) => 
   }
 };
 
+export const getCategory = () => async (dispatch) => {
+  try {
+    const res = await axios.get("http://localhost:8000/category/");
+    dispatch(setCategory(res.data.result));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getTransaction = () => async (dispatch) => {
   try {
     const res = await axios.get("http://localhost:8000/transaction/");
@@ -124,5 +140,7 @@ export const getTransaction = () => async (dispatch) => {
     console.log(error);
   }
 };
-export const { setProduk, setCart, setPage, setTransaction } = produkReducer.actions;
+
+export const { setProduk, setCart, setPage, setTransaction, setCategory } = produkReducer.actions;
+
 export default produkReducer.reducer;

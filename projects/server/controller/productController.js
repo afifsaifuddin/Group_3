@@ -59,7 +59,6 @@ const productController = {
         quantity,
         productImg: req.file.path,
       });
-      console.log(1);
 
       return res.status(200).json({ message: "success", result });
     } catch (err) {
@@ -86,7 +85,6 @@ const productController = {
         updateClause.productImg = req.file.path;
       }
       await product.update(updateClause, { where: { id: req.params.id } });
-      console.log(1);
       return res.status(200).json({ message: "update berhasil" });
     } catch (err) {
       return res.status(500).json({ message: err.message });
