@@ -14,6 +14,7 @@ export const Admin = () => {
           <TabList>
             <Tab>Cashier</Tab>
             <Tab>Product</Tab>
+            <Tab>Category</Tab>
             <Tab>Laporan Keuangan</Tab>
           </TabList>
           <TabPanels>

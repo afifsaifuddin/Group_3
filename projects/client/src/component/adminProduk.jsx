@@ -120,13 +120,10 @@ export const AdminProduk = () => {
                   height={"40vh"}
                   src={urlImage}
                   mb={"10px"}
+                  objectFit={"cover"}
+                  overflow={"hidden"}
                 />
-                <Input
-                  type="file"
-                  id="image"
-                  variant={""}
-                  onChange={handleImage}
-                />
+                <Input type="file" id="image" variant={""} onChange={handleImage} />
               </Box>
               <Box>
                 <Text fontWeight={"bold"} mb={"10px"}>
