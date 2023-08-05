@@ -19,6 +19,7 @@ const produkReducer = createSlice({
     },
     setCategory: (state, action) => {
       state.category = [...action.payload];
+      // console.log(state.category);
     },
     setCart: (state, action) => {
       console.log(state.cart);
@@ -174,6 +175,44 @@ export const getCategory = () => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const updateCategory = (id, name) => {
+  console.log(id, name);
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.patch(
+        `http://localhost:8000/category/${id}`,
+        { name },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      alert("Update Category Success");
+    } catch (error) {
+      alert("Update Category Failed");
+    }
+  };
+};
+
+export const createCategory = (name) => {
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    console.log(name);
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/category/",
+        { name },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      alert("Create Category Success");
+    } catch (error) {
+      alert("Create Category Failed");
+    }
+  };
 };
 
 export const getTransaction = () => async (dispatch) => {
