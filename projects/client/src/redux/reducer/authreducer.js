@@ -74,8 +74,7 @@ export const cekLogin = () => {
       });
       dispatch(setUser(res.data.cekUser));
     } catch (err) {
-      console.log(err.message);
-      alert(err.message);
+      alert("Anda Logout");
     }
   };
 };
