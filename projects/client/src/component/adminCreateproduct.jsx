@@ -62,7 +62,13 @@ export const AdminCreateproduct = () => {
                   objectFit={"cover"}
                   overflow={"hidden"}
                 />
-                <Input type="file" id="image" variant={""} onChange={handleImage} alt="Product Image" />
+                <Input
+                  type="file"
+                  id="image"
+                  variant={""}
+                  onChange={handleImage}
+                  alt="Product Image"
+                />
               </Box>
               <Box>
                 <Text fontWeight={"bold"} mb={"10px"}>
@@ -76,7 +82,7 @@ export const AdminCreateproduct = () => {
                 <Text fontWeight={"bold"} mb={"10px"}>
                   Kategory :{" "}
                 </Text>
-                <Input id="kategori" mb={"10px"} placeholder="deskripsi" />
+                <Input id="kategori" mb={"10px"} placeholder="kategori" />
                 <Text fontWeight={"bold"} mb={"10px"}>
                   Harga Beli :{" "}
                 </Text>
