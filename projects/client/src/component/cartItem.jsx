@@ -1,24 +1,7 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Image,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import React from "react";
 import { MdDeleteOutline } from "react-icons/md";
-import {
-  decrementQuantity,
-  deleteItem,
-  incrementQuantity,
-} from "../redux/reducer/produkreducer";
+import { decrementQuantity, deleteItem, incrementQuantity } from "../redux/reducer/produkreducer";
 import { useDispatch } from "react-redux";
 import { BsJustify } from "react-icons/bs";
 
@@ -31,6 +14,7 @@ export const CartItem = ({ produk }) => {
     dispatch(incrementQuantity(produk.id));
   };
 
+  console.log(produk);
   const handleDecrement = () => {
     dispatch(decrementQuantity(produk.id));
   };

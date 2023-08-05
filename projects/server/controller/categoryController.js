@@ -7,9 +7,7 @@ const categoryController = {
       const { name } = req.body;
       db.sequelize.transaction(async (t) => {
         const result = await category.create({ name }, { transaction: t });
-        return res
-          .status(200)
-          .json({ message: "Kategori baru berhasil dibuat", result });
+        return res.status(200).json({ message: "Kategori baru berhasil dibuat", result });
       });
     } catch (err) {
       return res.status(500).json({ message: err.message });
