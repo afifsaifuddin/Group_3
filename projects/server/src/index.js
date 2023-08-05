@@ -20,7 +20,13 @@ app.use(
 
 app.use(express.json());
 
-const { authRouter, productRouter, categoryRouter, cartRouter, transactionRouter } = require("../routers");
+const {
+  authRouter,
+  productRouter,
+  categoryRouter,
+  cartRouter,
+  transactionRouter,
+} = require("../routers");
 
 //#region API ROUTES
 
