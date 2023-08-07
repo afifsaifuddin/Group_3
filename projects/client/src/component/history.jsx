@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Heading, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTransaction } from "../redux/reducer/produkreducer";
@@ -8,10 +8,13 @@ import { Pagination } from "./pagination";
 export const History = () => {
   const [index, setIndex] = useState(1);
   const dispatch = useDispatch();
-
+  const [order, setOrder] = useState("DESC");
+  function buttonSort() {
+    setOrder("ASC" ? "DESC" : "ASC");
+  }
   useEffect(() => {
-    dispatch(getTransaction({ index }));
-  }, [index]);
+    dispatch(getTransaction({ index, order }));
+  }, [index, order]);
 
   const { page } = useSelector((state) => state.produkreducer);
   const transaction = useSelector((state) => state.produkreducer.transaction);
@@ -24,7 +27,12 @@ export const History = () => {
       <Table>
         <Thead>
           <Tr>
-            <Th>Nama Kasir</Th>
+            <Th>
+              <Flex justifyContent={"space-around"}>
+                Transaksi Terbaru
+                <Button onClick={buttonSort}>Sort ASC - DESC</Button>
+              </Flex>
+            </Th>
           </Tr>
         </Thead>
         <Tbody>

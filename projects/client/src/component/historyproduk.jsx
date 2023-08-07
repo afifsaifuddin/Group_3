@@ -36,9 +36,10 @@ const Historyproduk = ({ item }) => {
   return (
     <Box>
       <Button variant={"link"} onClick={handleOpen}>
-        <Td w={"20vw"}>{item.User.username}</Td>
-        <Td w={"20vw"}>Rp.{item.totalPrice},-</Td>
-        <Td w={"20vw"}>{item.createdAt.replace("T", " / ").slice(0, -5)}</Td>
+        <Td w={"10vw"}>ID#{item.id}</Td>
+        <Td w={"10vw"}>{item.User.username}</Td>
+        <Td w={"10vw"}>Rp.{item.totalPrice},-</Td>
+        <Td w={"10vw"}>{item.createdAt.replace("T", " / ").slice(0, -5)}</Td>
       </Button>
       <Collapse in={isOpen} animateOpacity>
         <Box p="20px" mt="4" border="1px" rounded="md" shadow="md">

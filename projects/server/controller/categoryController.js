@@ -1,5 +1,9 @@
 const db = require("../models");
 const category = db.Category;
+const setPagination = (limit, page) => {
+  const offset = (page - 1) * +limit;
+  return { limit: parseInt(limit), offset };
+};
 
 const categoryController = {
   createCategory: async (req, res) => {
@@ -16,8 +20,13 @@ const categoryController = {
 
   getCategory: async (req, res) => {
     try {
-      const result = await category.findAll();
-      return res.status(200).json({ message: "success", result });
+      const { limit = 7, page = 1, order = "ASC", orderBy = "createdAt" } = req.query;
+      const pagination = setPagination(limit, page);
+      const totalCategory = await category.count({});
+      const totalPage = Math.ceil(totalCategory / +limit);
+      const result = await category.findAll({ ...pagination });
+      const coba = { page, limit, totalCategory, totalPage, result };
+      return res.status(200).json({ message: "success", ...coba });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

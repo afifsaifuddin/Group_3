@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { createCategory, getCategory } from "../redux/reducer/produkreducer";
+import { createCategory, getCategory } from "../redux/reducer/categoryreducer";
 
 export const AdminCreateCategory = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

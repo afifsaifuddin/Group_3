@@ -10,15 +10,7 @@ const setPagination = (limit, page) => {
 
 const productController = {
   getProdukQuery: async (req, res) => {
-    const {
-      limit = 9,
-      page = 1,
-      order = "ASC",
-      orderBy = "createdAt",
-      categoryId,
-      name,
-    } = req.query;
-
+    const { limit = 9, page = 1, order = "ASC", orderBy = "createdAt", categoryId, name } = req.query;
     // const where = { isActive: true };
     const where = {};
     if (name) where.name = { [db.Sequelize.Op.like]: `%${name}%` };
@@ -40,7 +32,30 @@ const productController = {
       return res.status(500).json({ message: err.message });
     }
   },
+  getActiveProduct: async (req, res) => {
+    const { limit = 9, page = 1, order = "ASC", orderBy = "createdAt", categoryId, name } = req.query;
 
+    const where = {};
+    if (name) where.name = { [db.Sequelize.Op.like]: `%${name}%` };
+    if (categoryId) where.categoryId = categoryId;
+
+    const pagination = setPagination(limit, page);
+    const totalProduct = await product.count({ where: { ...where, isActive: true } });
+    const totalPage = Math.ceil(totalProduct / +limit);
+
+    try {
+      const result = await product.findAll({
+        where: { ...where, isActive: true },
+        include: database,
+        order: [[orderBy, order]],
+        ...pagination,
+      });
+      const coba = { page, limit, totalProduct, totalPage, result };
+      return res.status(200).json({ message: "success", ...coba });
+    } catch (err) {
+      return req.status(500).json({ message: err.message });
+    }
+  },
   getProdukbyId: async (req, res) => {
     try {
       const { id } = req.params;
@@ -53,25 +68,10 @@ const productController = {
 
   uploadProduk: async (req, res) => {
     try {
-      const {
-        name,
-        categoryId,
-        description,
-        modal_produk,
-        harga_produk,
-        quantity,
-      } = req.body;
+      const { name, categoryId, description, modal_produk, harga_produk, quantity } = req.body;
       console.log(req.file);
-      if (!req.file)
-        return res.status(400).json({ message: "file gamebar harus ada" });
-      console.log(
-        name,
-        categoryId,
-        description,
-        modal_produk,
-        harga_produk,
-        quantity
-      );
+      if (!req.file) return res.status(400).json({ message: "file gamebar harus ada" });
+      console.log(name, categoryId, description, modal_produk, harga_produk, quantity);
       const result = await product.create({
         name,
         categoryId,
@@ -90,15 +90,7 @@ const productController = {
 
   updateProduk: async (req, res) => {
     try {
-      const {
-        name,
-        categoryId,
-        description,
-        modal_produk,
-        harga_produk,
-        quantity,
-        isActive,
-      } = req.body;
+      const { name, categoryId, description, modal_produk, harga_produk, quantity, isActive } = req.body;
       const item = await product.findOne({ where: { id: req.params.id } });
       const updateClause = {};
       if (name) updateClause.name = name;
@@ -110,8 +102,7 @@ const productController = {
       if (isActive) updateClause.isActive = isActive;
       if (req.file) {
         fs.unlink(item.productImg, (err) => {
-          if (err)
-            res.status(500).json({ message: "Ubah gambar ada yang salah" });
+          if (err) res.status(500).json({ message: "Ubah gambar ada yang salah" });
         });
         updateClause.productImg = req.file.path;
       }
@@ -126,13 +117,8 @@ const productController = {
     const { id } = req.params;
     try {
       db.sequelize.transaction(async (t) => {
-        await product.update(
-          { isActive: false },
-          { where: { id } },
-          { transaction: t }
-        );
-        if (isActive)
-          return res.status(200).json({ message: "produk telah diaktifkan" });
+        await product.update({ isActive: false }, { where: { id } }, { transaction: t });
+        if (isActive) return res.status(200).json({ message: "produk telah diaktifkan" });
 
         return req.status(200).json({ message: "produk telah dinonaktifkan" });
       });

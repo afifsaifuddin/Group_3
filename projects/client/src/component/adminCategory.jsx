@@ -13,6 +13,7 @@ import {
   Table,
   Tbody,
   Td,
+  Tfoot,
   Th,
   Thead,
   Tr,
@@ -21,23 +22,29 @@ import {
 import React, { useEffect, useState } from "react";
 import AdminCreateCategory from "./adminCreateCategory";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategory, updateCategory } from "../redux/reducer/produkreducer";
+import { getCategory, updateCategory } from "../redux/reducer/categoryreducer";
+import { Pagination } from "./pagination";
 
 export const AdminCategory = () => {
-  const { category } = useSelector((state) => state.produkreducer);
+  const { category } = useSelector((state) => state.categoryreducer);
   const [modalCategory, setModalCategory] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [newname, setNewName] = useState("");
+  const [index, setIndex] = useState(1);
+
   const dispatch = useDispatch();
   const handleUpdate = async (id, name) => {
     await dispatch(updateCategory(id, name));
-    await dispatch(getCategory());
+    await dispatch(getCategory({ index }));
     onClose();
   };
 
   useEffect(() => {
-    dispatch(getCategory());
-  }, []);
+    dispatch(getCategory({ index }));
+  }, [index]);
+
+  const { page } = useSelector((state) => state.categoryreducer);
+
   return (
     <Box>
       <Flex justifyContent={"end"} mr={"100px"}>
@@ -62,14 +69,16 @@ export const AdminCategory = () => {
                   onClick={() => {
                     setModalCategory(item);
                     onOpen();
-                  }}
-                >
+                  }}>
                   EDIT
                 </Button>
               </Td>
             </Tr>
           ))}
         </Tbody>
+        <Tfoot>
+          <Pagination page={page} index={index} setIndex={setIndex} />
+        </Tfoot>
       </Table>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
@@ -104,8 +113,7 @@ export const AdminCategory = () => {
               mr={3}
               onClick={() => {
                 handleUpdate(modalCategory.id, newname);
-              }}
-            >
+              }}>
               SAVE
             </Button>
           </ModalFooter>

@@ -4,7 +4,6 @@ const axios = require("axios");
 const initialState = {
   produk: [],
   cart: [],
-  category: [],
   totalharga: 0,
   page: 0,
   transaction: [],
@@ -17,20 +16,16 @@ const produkReducer = createSlice({
     setProduk: (state, action) => {
       state.produk = [...action.payload];
     },
-    setCategory: (state, action) => {
-      state.category = [...action.payload];
-      // console.log(state.category);
-    },
+
     setCart: (state, action) => {
-      console.log(state.cart);
-      // state.cart = [...state.cart, action.payload];
-      const { id } = action.payload;
+      const { id, quantity } = action.payload;
       const existingItemIndex = state.cart.findIndex((item) => item.id === id);
       if (existingItemIndex !== -1) {
-        // Jika item sudah ada dalam keranjang, tambahkan jumlahnya
+        if (state.cart[existingItemIndex].quantity >= quantity) {
+          return;
+        }
         state.cart[existingItemIndex].quantity += 1;
       } else {
-        // Jika item belum ada dalam keranjang, tambahkan sebagai produk baru dengan jumlah 1
         state.cart.push({ ...action.payload, quantity: 1 });
       }
       state.totalharga += action.payload.harga_produk;
@@ -39,7 +34,6 @@ const produkReducer = createSlice({
       const productId = action.payload;
       const existingItemIndex = state.cart.findIndex((item) => item.id === productId);
       if (existingItemIndex !== -1) {
-        // Jika item ditemukan dalam keranjang, hapus item tersebut
         const deletedItem = state.cart[existingItemIndex];
         state.totalharga -= deletedItem.harga_produk * deletedItem.quantity;
         state.cart.splice(existingItemIndex, 1);
@@ -48,6 +42,9 @@ const produkReducer = createSlice({
     incrementQuantity: (state, action) => {
       const productId = action.payload;
       const existingItem = state.cart.find((item) => item.id === productId);
+      const stockItem = state.produk.find((item) => item.id === productId);
+      if (stockItem.quantity <= existingItem.quantity) return;
+
       if (existingItem) {
         existingItem.quantity += 1;
         state.totalharga += existingItem.harga_produk;
@@ -56,7 +53,13 @@ const produkReducer = createSlice({
     decrementQuantity: (state, action) => {
       const productId = action.payload;
       const existingItem = state.cart.find((item) => item.id === productId);
-      if (existingItem && existingItem.quantity > 1) {
+
+      if (existingItem && existingItem.quantity === 1) {
+        const existingItemIndex = state.cart.findIndex((item) => item.id === productId);
+        if (existingItemIndex !== -1) {
+          state.cart.splice(existingItemIndex, 1);
+        }
+      } else if (existingItem && existingItem.quantity > 1) {
         existingItem.quantity -= 1;
         state.totalharga -= existingItem.harga_produk;
       }
@@ -68,17 +71,36 @@ const produkReducer = createSlice({
     setTransaction: (state, action) => {
       state.transaction = [...action.payload];
     },
+    deleteCart: (state, action) => {
+      state.cart.splice(0, state.cart.length);
+    },
   },
 });
 
 export const getProduk =
   ({ index = 1, name = "", category = "", order = "ASC", limit = 9, orderBy = "createdAt" }) =>
   async (dispatch) => {
-    console.log(name);
     try {
+      console.log(category, order, orderBy);
       const res = await axios.get(
         `http://localhost:8000/product/?page=${index}&name=${name}&categoryId=${category}&order=${order}&limit=${limit}&orderBy=${orderBy}`
       );
+      dispatch(setProduk(res.data.result));
+      dispatch(setPage(res.data.totalPage));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const getActiveProduk =
+  ({ index = 1, name = "", category = "", order = "ASC", limit = 9, orderBy = "createdAt" }) =>
+  async (dispatch) => {
+    try {
+      console.log(category, order, orderBy);
+      const res = await axios.get(
+        `http://localhost:8000/product/active?page=${index}&name=${name}&categoryId=${category}&order=${order}&limit=${limit}&orderBy=${orderBy}`
+      );
+      console.log(res.data.totalPage);
       dispatch(setProduk(res.data.result));
       dispatch(setPage(res.data.totalPage));
     } catch (error) {
@@ -130,22 +152,15 @@ export const createTransaction = (totalharga, itemCarts) => async (dispatch) => 
     const res = await axios.post(
       "http://localhost:8000/transaction/",
       { totalharga },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
     const transactionId = res.data.result.id;
     itemCarts.forEach(async (item) => {
       try {
-        console.log(item.id, item.quantity, item.harga_produk);
         const res = await axios.post(
           "http://localhost:8000/transaction/item",
           { item, transactionId },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
       } catch (err) {
         console.log(err);
@@ -157,55 +172,8 @@ export const createTransaction = (totalharga, itemCarts) => async (dispatch) => 
   }
 };
 
-export const getCategory = () => async (dispatch) => {
-  try {
-    const res = await axios.get("http://localhost:8000/category/");
-    dispatch(setCategory(res.data.result));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const updateCategory = (id, name) => {
-  console.log(id, name);
-  return async (dispatch) => {
-    const token = localStorage.getItem("token");
-    try {
-      const res = await axios.patch(
-        `http://localhost:8000/category/${id}`,
-        { name },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      alert("Update Category Success");
-    } catch (error) {
-      alert("Update Category Failed");
-    }
-  };
-};
-
-export const createCategory = (name) => {
-  return async (dispatch) => {
-    const token = localStorage.getItem("token");
-    console.log(name);
-    try {
-      const res = await axios.post(
-        "http://localhost:8000/category/",
-        { name },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      alert("Create Category Success");
-    } catch (error) {
-      alert("Create Category Failed");
-    }
-  };
-};
-
 export const getTransaction =
-  ({ index = 1 }) =>
+  ({ index = 1, order = "ASC" }) =>
   async (dispatch) => {
     try {
       const res = await axios.get(`http://localhost:8000/transaction/?page=${index}`);
@@ -225,13 +193,28 @@ export const getTransactionId = (id) => async (dispatch) => {
   }
 };
 
+export const getTransactionAdmin =
+  ({ startDateParam, endDateParam }) =>
+  async (dispatch) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/transaction/date/?dateBefore=${startDateParam}&dateAfter=${endDateParam}`,
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
+      console.log(res.data.result);
+      dispatch(setTransaction(res.data.result));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 export const {
   setProduk,
   deleteItem,
   setCart,
+  deleteCart,
   setPage,
   setTransaction,
-  setCategory,
   incrementQuantity,
   decrementQuantity,
 } = produkReducer.actions;
