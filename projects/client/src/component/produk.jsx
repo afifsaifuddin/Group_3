@@ -2,7 +2,8 @@ import { Box, Flex, Select, Stack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import CardProduk from "./produkCard.";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategory, getProduk } from "../redux/reducer/produkreducer";
+import { getActiveProduk, getProduk } from "../redux/reducer/produkreducer";
+import { getCategoryAll } from "../redux/reducer/categoryreducer";
 import { Pagination } from "./pagination";
 import Searchbar from "./searchbar";
 import ButtonCart from "./buttonCart";
@@ -10,42 +11,29 @@ import ButtonCart from "./buttonCart";
 export const Produk = () => {
   const dispatch = useDispatch();
   const [index, setIndex] = useState(1);
-  const { page } = useSelector((state) => state.produkreducer);
-  const produk = useSelector((state) => state.produkreducer.produk);
-  const category = useSelector((state) => state.produkreducer.category);
-
+  const { page, produk } = useSelector((state) => state.produkreducer);
+  const category = useSelector((state) => state.categoryreducer.category);
+  const [query, setQuery] = useState({});
   const handleCategory = (e) => {
     const category = e.target.value;
     dispatch(getProduk({ category }));
   };
-  // const handleOrderBy = (e) => {
-  //   const order = e.target.value;
-  //   dispatch(getProduk({ order }));
-  // };
+
   const handleOrderBy = (e) => {
-    const order = e.target.value;
-    if (order === "harga tertinggi") {
-      dispatch(getProduk({ order: "DESC", orderBy: "harga_produk" }));
-    } else if (order === "harga terendah") {
-      dispatch(getProduk({ order: "ASC", orderBy: "harga_produk" }));
-    } else if (order === "ASC") {
-      dispatch(getProduk({ order: "ASC" }));
-    } else {
-      dispatch(getProduk({ order: "DESC" }));
-    }
+    const selectedValue = e.target.value;
+    const [order, orderBy] = selectedValue.split("|");
+    dispatch({ order, orderBy });
   };
 
   useEffect(() => {
-    dispatch(getProduk({ index }));
-    dispatch(getCategory());
+    dispatch(getActiveProduk({ index }));
+    dispatch(getCategoryAll({}));
   }, [index]);
-
-  console.log(produk);
 
   return (
     <Flex mt={"5px"} ml={"20px"} justifyContent={"space-between"}>
       <Stack>
-        <Flex gap={"5px"} width={"100%"}>
+        <Flex gap={"5px"}>
           <Box width={"28vw"}>
             <Searchbar />
           </Box>
@@ -53,6 +41,7 @@ export const Produk = () => {
             placeholder="Pilih Kategori"
             width={"20vw"}
             focusBorderColor="#FC2947"
+            name="category"
             onChange={handleCategory}
           >
             {category.map((item) => (
@@ -65,22 +54,22 @@ export const Produk = () => {
             width={"20vw"}
             placeholder="Urutkan Berdasarkan"
             focusBorderColor="#FC2947"
+            name="orderBy"
             onChange={handleOrderBy}
           >
-            <option value={"harga tertinggi"}>Harga Tertinggi</option>
-            <option value={"harga terendah"}>Harga Terendah</option>
-            <option value={"ASC"}>A - Z</option>
-            <option value={"DESC"}>Z - A</option>
+            <option value="ASC|harga_produk">Harga Tertinggi</option>
+            <option value="DESC|harga_produk">Harga Terendah</option>
+            <option value="ASC">A - Z</option>
+            <option value="DESC">Z - A</option>
           </Select>
         </Flex>
-        <Flex wrap={"wrap"} gap={"20px"} mt={"20px"}>
-          {produk
-            .filter((item) => item.isActive)
-            .map((item) => (
+        <Box h={"80vh"} w={"90vw"}>
+          <Flex wrap={"wrap"} gap={"20px"} mt={"20px"}>
+            {produk.map((item) => (
               <CardProduk key={item.id} produk={item} />
             ))}
-        </Flex>
-        <Box position={"absolute"} mt={"80vh"} ml={"50vh"}></Box>
+          </Flex>
+        </Box>
         <Pagination page={page} index={index} setIndex={setIndex} />
       </Stack>
       <ButtonCart />

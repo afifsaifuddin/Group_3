@@ -20,20 +20,13 @@ app.use(
 
 app.use(express.json());
 
-const {
-  authRouter,
-  productRouter,
-  categoryRouter,
-  cartRouter,
-  transactionRouter,
-} = require("../routers");
+const { authRouter, productRouter, categoryRouter, transactionRouter } = require("../routers");
 
 //#region API ROUTES
 
 app.use("/pos-kasir", authRouter);
 app.use("/product", productRouter);
 app.use("/category", categoryRouter);
-app.use("/cart", cartRouter);
 app.use("/transaction", transactionRouter);
 app.use("/", express.static(path.resolve(__dirname, "../")));
 // ===========================

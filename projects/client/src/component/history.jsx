@@ -47,7 +47,6 @@ export const History = () => {
         <Thead>
           <Flex gap={"10px"}>
             <Text>Set Date</Text>
-
             <DatePicker
               selected={selectedDate}
               onChange={handleDateChange}
@@ -56,7 +55,9 @@ export const History = () => {
           </Flex>
           ;
           <Tr>
-            <Th>Nama Kasir</Th>
+            <Th>
+              <Flex justifyContent={"space-around"}>Transaksi Terbaru</Flex>
+            </Th>
           </Tr>
         </Thead>
         <Tbody>

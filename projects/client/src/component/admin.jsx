@@ -11,6 +11,7 @@ import React from "react";
 import AdminCashier from "./adminCashier";
 import AdminProduk from "./adminProduk";
 import AdminCategory from "./adminCategory";
+import AdminLaporan from "./adminLaporan";
 
 export const Admin = () => {
   return (
@@ -64,6 +65,11 @@ export const Admin = () => {
             <TabPanel>
               <Box>
                 <AdminCategory />
+              </Box>
+            </TabPanel>
+            <TabPanel>
+              <Box>
+                <AdminLaporan />
               </Box>
             </TabPanel>
           </TabPanels>

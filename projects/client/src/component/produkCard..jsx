@@ -12,19 +12,22 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { getProduk, setCart } from "../redux/reducer/produkreducer";
+import {
+  getActiveProduk,
+  getProduk,
+  setCart,
+} from "../redux/reducer/produkreducer";
 
 export const CardProduk = ({ produk }) => {
   const dispatch = useDispatch();
   const handleAddToCart = async () => {
     await dispatch(setCart(produk));
-    await dispatch(getProduk({}));
+    await dispatch(getActiveProduk({}));
   };
-
   if (!produk) return <></>;
   return (
     <Flex>
-      <Box width={"500px"} borderRadius={"8px"}>
+      <Box width={"450px"} borderRadius={"8px"}>
         <Card
           direction={{ base: "column", sm: "row" }}
           border={"2px solid #FC2947"}

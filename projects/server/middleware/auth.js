@@ -25,7 +25,6 @@ const cekRole = async (req, res, next) => {
   const { id } = req.user;
   const cekUser = await db.User.findByPk(id);
   if (cekUser.role != "admin") return res.status(400).json({ message: "anda bukan admin" });
-
   next();
 };
 

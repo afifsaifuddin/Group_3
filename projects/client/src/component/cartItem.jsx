@@ -33,6 +33,7 @@ export const CartItem = ({ produk }) => {
   const handleDecrement = () => {
     dispatch(decrementQuantity(produk.id));
   };
+  console.log(produk);
   return (
     <Box>
       <Tr>
