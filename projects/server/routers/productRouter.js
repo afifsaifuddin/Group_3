@@ -5,6 +5,7 @@ const { multerUpload } = require("../middleware/multer");
 const { productValidator, resultValidation } = require("../middleware/validator");
 
 router.get("/", productController.getProdukQuery);
+router.get("/active", productController.getActiveProduct);
 router.get("/:id", productController.getProdukbyId);
 router.post(
   "/upload",

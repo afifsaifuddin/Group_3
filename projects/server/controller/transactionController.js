@@ -12,7 +12,7 @@ const setPagination = (limit, page) => {
 const transactionController = {
   getAll: async (req, res) => {
     try {
-      const { limit = 9, page = 1, order = "ASC", orderBy = "createdAt" } = req.query;
+      const { limit = 9, page = 1, order = "DESC", orderBy = "createdAt" } = req.query;
       const pagination = setPagination(limit, page);
       const totalTransaction = await transaction.count({});
       const totalPage = Math.ceil(totalTransaction / +limit);
@@ -20,6 +20,7 @@ const transactionController = {
       const result = await transaction.findAll({
         attributes: { exclude: ["userId"] },
         include: database,
+        order: [[orderBy, order]],
         ...pagination,
       });
 
@@ -63,8 +64,32 @@ const transactionController = {
         price: item.harga_produk,
       });
       const itemTransaction = await product.findByPk(item.id);
-      itemTransaction.decrement("quantity", { by: item.quantity });
-      return res.status(200).json({ message: "success" });
+      await itemTransaction.decrement("quantity", { by: item.quantity });
+      if (itemTransaction.quantity - item.quantity <= 0) {
+        await itemTransaction.update({ isActive: false });
+      }
+      return res.status(200).json({ message: "success", result });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  },
+
+  getTransactionDate: async (req, res) => {
+    try {
+      const { order = "ASC", orderBy = "createdAt", dateBefore, dateAfter } = req.query;
+
+      const where = {};
+      if (dateBefore) where.createdAt = { [db.Sequelize.Op.gte]: dateBefore };
+      if (dateAfter) where.createdAt = { [db.Sequelize.Op.lte]: dateAfter };
+
+      const result = await transaction.findAll({
+        where,
+        attributes: { exclude: ["userId"] },
+        include: database,
+        order: [[orderBy, order]],
+      });
+      console.log(result);
+      return res.status(200).json({ message: "success", result });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

@@ -1,7 +1,7 @@
 import { Box, Button, Input, Modal, ModalContent, ModalHeader, ModalOverlay, Stack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createTransaction } from "../redux/reducer/produkreducer";
+import { createTransaction, deleteCart, getProduk } from "../redux/reducer/produkreducer";
 
 export const Pembayaran = ({ isOpen, onClose }) => {
   const [bayar, setBayar] = useState(0);
@@ -9,10 +9,12 @@ export const Pembayaran = ({ isOpen, onClose }) => {
   const totalharga = useSelector((state) => state.produkreducer.totalharga);
   const dispatch = useDispatch();
   const itemCarts = useSelector((state) => state.produkreducer.cart);
-  const handlepembayaran = () => {
+  const handlepembayaran = async () => {
     const total = bayar - totalharga;
     setKembalian(total);
-    dispatch(createTransaction(totalharga, itemCarts));
+    await dispatch(createTransaction(totalharga, itemCarts));
+    await dispatch(getProduk({}));
+    await dispatch(deleteCart());
   };
 
   return (
