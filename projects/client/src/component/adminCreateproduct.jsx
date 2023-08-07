@@ -11,16 +11,18 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { createProduct, getProduk } from "../redux/reducer/produkreducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const AdminCreateproduct = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
+  const category = useSelector((state) => state.produkreducer.category);
   const [urlImage, setUrlImage] = useState("");
   const handleImage = (e) => {
     const [file] = document.getElementById("image").files;
@@ -39,6 +41,7 @@ export const AdminCreateproduct = () => {
     const file = document.getElementById("image").files[0];
     await dispatch(createProduct(data, file));
     await dispatch(getProduk({}));
+    onClose();
   };
 
   return (
@@ -82,7 +85,13 @@ export const AdminCreateproduct = () => {
                 <Text fontWeight={"bold"} mb={"10px"}>
                   Kategory :{" "}
                 </Text>
-                <Input id="kategori" mb={"10px"} placeholder="kategori" />
+                <Select id="kategori">
+                  {category.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}{" "}
+                    </option>
+                  ))}
+                </Select>
                 <Text fontWeight={"bold"} mb={"10px"}>
                   Harga Beli :{" "}
                 </Text>

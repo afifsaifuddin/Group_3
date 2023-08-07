@@ -18,6 +18,7 @@ export const Produk = () => {
     const category = e.target.value;
     dispatch(getProduk({ category }));
   };
+
   const handleOrderBy = (e) => {
     const selectedValue = e.target.value;
     const [order, orderBy] = selectedValue.split("|");
@@ -41,7 +42,8 @@ export const Produk = () => {
             width={"20vw"}
             focusBorderColor="#FC2947"
             name="category"
-            onChange={handleCategory}>
+            onChange={handleCategory}
+          >
             {category.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -53,7 +55,8 @@ export const Produk = () => {
             placeholder="Urutkan Berdasarkan"
             focusBorderColor="#FC2947"
             name="orderBy"
-            onChange={handleOrderBy}>
+            onChange={handleOrderBy}
+          >
             <option value="ASC|harga_produk">Harga Tertinggi</option>
             <option value="DESC|harga_produk">Harga Terendah</option>
             <option value="ASC">A - Z</option>

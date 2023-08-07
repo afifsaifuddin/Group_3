@@ -1,7 +1,21 @@
-import { Box, Button, Input, Modal, ModalContent, ModalHeader, ModalOverlay, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Input,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createTransaction, deleteCart, getProduk } from "../redux/reducer/produkreducer";
+import {
+  createTransaction,
+  deleteCart,
+  getProduk,
+} from "../redux/reducer/produkreducer";
 
 export const Pembayaran = ({ isOpen, onClose }) => {
   const [bayar, setBayar] = useState(0);
@@ -20,7 +34,12 @@ export const Pembayaran = ({ isOpen, onClose }) => {
   return (
     <Box>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay bg="none" backdropFilter="auto" backdropInvert="10%" backdropBlur="10px" />
+        <ModalOverlay
+          bg="none"
+          backdropFilter="auto"
+          backdropInvert="10%"
+          backdropBlur="10px"
+        />
         <ModalContent borderRadius={"8px"} px={"100px"} pb={"50px"}>
           <ModalHeader align={"center"}>Pembayaran</ModalHeader>
           <Stack>
