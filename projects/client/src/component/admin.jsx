@@ -10,7 +10,6 @@ import {
 import React from "react";
 import AdminCashier from "./adminCashier";
 import AdminProduk from "./adminProduk";
-import AdminCreateCategory from "./adminCreateCategory";
 import AdminCategory from "./adminCategory";
 
 export const Admin = () => {
@@ -20,12 +19,36 @@ export const Admin = () => {
         <Heading>Cashier App - Admin Dashboard</Heading>
       </Box>
       <Box>
-        <Tabs isLazy>
-          <TabList>
-            <Tab>Cashier</Tab>
-            <Tab>Product</Tab>
-            <Tab>Category</Tab>
-            <Tab>Laporan Keuangan</Tab>
+        <Tabs>
+          <TabList borderColor={"#FC2947"}>
+            <Tab
+              _selected={{
+                color: "#FC2947",
+              }}
+            >
+              Cashier
+            </Tab>
+            <Tab
+              _selected={{
+                color: "#FC2947",
+              }}
+            >
+              Product
+            </Tab>
+            <Tab
+              _selected={{
+                color: "#FC2947",
+              }}
+            >
+              Category
+            </Tab>
+            <Tab
+              _selected={{
+                color: "#FC2947",
+              }}
+            >
+              Laporan Keuangan
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>

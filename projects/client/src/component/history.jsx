@@ -1,17 +1,39 @@
-import { Box, Button, Center, Heading, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Heading,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTransaction } from "../redux/reducer/produkreducer";
 import Historyproduk from "./historyproduk";
 import { Pagination } from "./pagination";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export const History = () => {
   const [index, setIndex] = useState(1);
   const dispatch = useDispatch();
+  const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
-    dispatch(getTransaction({ index }));
-  }, [index]);
+    dispatch(getTransaction({ index, selectedDate }));
+  }, [index, selectedDate]);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setIndex(1); // Reset index when date changes to show the first page of results
+  };
 
   const { page } = useSelector((state) => state.produkreducer);
   const transaction = useSelector((state) => state.produkreducer.transaction);
@@ -23,12 +45,31 @@ export const History = () => {
       </Box>
       <Table>
         <Thead>
+          <Flex gap={"10px"}>
+            <Text>Set Date</Text>
+
+            <DatePicker
+              selected={selectedDate}
+              onChange={handleDateChange}
+              placeholderText="Select a date"
+            />
+          </Flex>
+          ;
           <Tr>
             <Th>Nama Kasir</Th>
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>{transaction && transaction.map((item) => <Historyproduk key={item.id} item={item} />)}</Tr>
+          {transaction &&
+            transaction
+              .filter((item) => {
+                if (!selectedDate) return true;
+                const transactionDate = new Date(item.createdAt); // Use createdAt or transactionDate based on your API response
+                return (
+                  transactionDate.toDateString() === selectedDate.toDateString()
+                );
+              })
+              .map((item) => <Historyproduk key={item.id} item={item} />)}
         </Tbody>
         <Tfoot>
           <Pagination page={page} index={index} setIndex={setIndex} />

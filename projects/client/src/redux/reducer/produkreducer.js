@@ -37,7 +37,9 @@ const produkReducer = createSlice({
     },
     deleteItem: (state, action) => {
       const productId = action.payload;
-      const existingItemIndex = state.cart.findIndex((item) => item.id === productId);
+      const existingItemIndex = state.cart.findIndex(
+        (item) => item.id === productId
+      );
       if (existingItemIndex !== -1) {
         // Jika item ditemukan dalam keranjang, hapus item tersebut
         const deletedItem = state.cart[existingItemIndex];
@@ -72,7 +74,14 @@ const produkReducer = createSlice({
 });
 
 export const getProduk =
-  ({ index = 1, name = "", category = "", order = "ASC", limit = 9, orderBy = "createdAt" }) =>
+  ({
+    index = 1,
+    name = "",
+    category = "",
+    order = "ASC",
+    limit = 9,
+    orderBy = "createdAt",
+  }) =>
   async (dispatch) => {
     console.log(name);
     try {
@@ -95,9 +104,13 @@ export const updateProduk = (data, id, file) => {
       formData.append(key, data[key]);
     }
     try {
-      const res = await axios.patch(`http://localhost:8000/product/updateProduk/${id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.patch(
+        `http://localhost:8000/product/updateProduk/${id}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Update Product Success");
     } catch (error) {
       alert("Update Product Failed");
@@ -115,9 +128,13 @@ export const createProduct = (data, file) => {
     }
     formData.append("productImg", file);
     try {
-      const res = await axios.post(`http://localhost:8000/product/upload`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        `http://localhost:8000/product/upload`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Create Product Success");
     } catch (error) {
       alert("Create Product Failed");
@@ -125,37 +142,38 @@ export const createProduct = (data, file) => {
   };
 };
 
-export const createTransaction = (totalharga, itemCarts) => async (dispatch) => {
-  try {
-    const res = await axios.post(
-      "http://localhost:8000/transaction/",
-      { totalharga },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    const transactionId = res.data.result.id;
-    itemCarts.forEach(async (item) => {
-      try {
-        console.log(item.id, item.quantity, item.harga_produk);
-        const res = await axios.post(
-          "http://localhost:8000/transaction/item",
-          { item, transactionId },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    });
-    alert("transaction berhasil");
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const createTransaction =
+  (totalharga, itemCarts) => async (dispatch) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/transaction/",
+        { totalharga },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      const transactionId = res.data.result.id;
+      itemCarts.forEach(async (item) => {
+        try {
+          console.log(item.id, item.quantity, item.harga_produk);
+          const res = await axios.post(
+            "http://localhost:8000/transaction/item",
+            { item, transactionId },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      });
+      alert("transaction berhasil");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const getCategory = () => async (dispatch) => {
   try {
@@ -205,10 +223,15 @@ export const createCategory = (name) => {
 };
 
 export const getTransaction =
-  ({ index = 1 }) =>
+  ({ index = 1, selectedDate }) =>
   async (dispatch) => {
     try {
-      const res = await axios.get(`http://localhost:8000/transaction/?page=${index}`);
+      const dateParam = selectedDate
+        ? `&date=${selectedDate.toISOString()}`
+        : "";
+      const res = await axios.get(
+        `http://localhost:8000/transaction/?page=${index}${dateParam}`
+      );
       dispatch(setTransaction(res.data.result));
       dispatch(setPage(res.data.totalPage));
     } catch (err) {

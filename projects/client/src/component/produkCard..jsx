@@ -1,4 +1,15 @@
-import { Box, Button, Card, CardBody, CardFooter, Flex, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Flex,
+  Heading,
+  Image,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { getProduk, setCart } from "../redux/reducer/produkreducer";
@@ -14,7 +25,11 @@ export const CardProduk = ({ produk }) => {
   return (
     <Flex>
       <Box width={"500px"} borderRadius={"8px"}>
-        <Card direction={{ base: "column", sm: "row" }} border={"2px solid #FC2947"} shadow={"xl"}>
+        <Card
+          direction={{ base: "column", sm: "row" }}
+          border={"2px solid #FC2947"}
+          shadow={"xl"}
+        >
           <Image
             loading="lazy"
             objectFit="cover"
@@ -35,7 +50,11 @@ export const CardProduk = ({ produk }) => {
               </Flex>
             </CardBody>
             <CardFooter>
-              <Button variant="solid" bgColor={"#FC2947"} onClick={handleAddToCart}>
+              <Button
+                variant="solid"
+                bgColor={"#FC2947"}
+                onClick={handleAddToCart}
+              >
                 Tambahkan ke keranjang
               </Button>
             </CardFooter>

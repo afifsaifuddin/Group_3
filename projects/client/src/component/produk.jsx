@@ -18,10 +18,23 @@ export const Produk = () => {
     const category = e.target.value;
     dispatch(getProduk({ category }));
   };
+  // const handleOrderBy = (e) => {
+  //   const order = e.target.value;
+  //   dispatch(getProduk({ order }));
+  // };
   const handleOrderBy = (e) => {
     const order = e.target.value;
-    dispatch(getProduk({ order }));
+    if (order === "harga tertinggi") {
+      dispatch(getProduk({ order: "DESC", orderBy: "harga_produk" }));
+    } else if (order === "harga terendah") {
+      dispatch(getProduk({ order: "ASC", orderBy: "harga_produk" }));
+    } else if (order === "ASC") {
+      dispatch(getProduk({ order: "ASC" }));
+    } else {
+      dispatch(getProduk({ order: "DESC" }));
+    }
   };
+
   useEffect(() => {
     dispatch(getProduk({ index }));
     dispatch(getCategory());
@@ -32,20 +45,30 @@ export const Produk = () => {
   return (
     <Flex mt={"5px"} ml={"20px"} justifyContent={"space-between"}>
       <Stack>
-        <Flex gap={"5px"} justifyContent={"space-between"} width={"100%"}>
+        <Flex gap={"5px"} width={"100%"}>
           <Box width={"28vw"}>
             <Searchbar />
           </Box>
-          <Select placeholder="Pilih Kategori" width={"20vw"} focusBorderColor="#FC2947" onChange={handleCategory}>
+          <Select
+            placeholder="Pilih Kategori"
+            width={"20vw"}
+            focusBorderColor="#FC2947"
+            onChange={handleCategory}
+          >
             {category.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
               </option>
             ))}
           </Select>
-          <Select width={"20vw"} placeholder="Urutkan Berdasarkan" focusBorderColor="#FC2947" onChange={handleOrderBy}>
-            {/* <option value={"harga_tertinggi"}>Harga Tertinggi</option>
-              <option>Harga Terendah</option> */}
+          <Select
+            width={"20vw"}
+            placeholder="Urutkan Berdasarkan"
+            focusBorderColor="#FC2947"
+            onChange={handleOrderBy}
+          >
+            <option value={"harga tertinggi"}>Harga Tertinggi</option>
+            <option value={"harga terendah"}>Harga Terendah</option>
             <option value={"ASC"}>A - Z</option>
             <option value={"DESC"}>Z - A</option>
           </Select>
