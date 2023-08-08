@@ -122,7 +122,7 @@ export const updateProduk = (data, id, file) => {
       formData.append(key, data[key]);
     }
     try {
-      const res = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/product/updateProduk/${id}`, formData, {
+      const res = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/product/${id}`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Update Product Success");
@@ -142,7 +142,7 @@ export const createProduct = (data, file) => {
     }
     formData.append("productImg", file);
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/product/upload`, formData, {
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/product/`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Create Product Success");

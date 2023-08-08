@@ -45,14 +45,27 @@ export const getCategory =
     }
   };
 
-export const updateCategory = (id, name) => {
-  console.log(id, name);
+export const getActiveCategoryAll = () => async (dispatch) => {
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/category/active`);
+    const res2 = await axios.get(
+      `${process.env.REACT_APP_API_BASE_URL}/category/active?limit=${res.data.totalCategory}`
+    );
+
+    dispatch(setCategory(res2.data.result));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateCategory = (id, name, isActive) => {
+  console.log(id, name, isActive);
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     try {
       const res = await axios.patch(
         `${process.env.REACT_APP_API_BASE_URL}/category/${id}`,
-        { name },
+        { name, isActive },
         {
           headers: { Authorization: `Bearer ${token}` },
         }

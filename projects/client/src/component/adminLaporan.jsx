@@ -14,6 +14,23 @@ const AdminLaporan = () => {
   const [endDate, setEndDate] = useState(new Date());
   const dispatch = useDispatch();
 
+  const handlePrint = () => {
+    const printWindow = window.open("", "_blank");
+
+    printWindow.document.write("<html><head><title>Print Sales Produk</title></head><body>");
+    printWindow.document.write("<h1>Grafis Transaksi</h1>");
+    printWindow.document.write("<div>");
+    printWindow.document.write(document.getElementById("transaction-graph").innerHTML);
+    printWindow.document.write("</div>");
+    printWindow.document.write("<h1>Produk Terjual</h1>");
+    printWindow.document.write("<div>");
+    printWindow.document.write(document.getElementById("product-sold-table").innerHTML);
+    printWindow.document.write("</div>");
+    printWindow.document.write("</body></html>");
+
+    printWindow.print();
+  };
+
   useEffect(() => {
     const formattedStartDate = startDate.toISOString().split("T")[0];
     const formattedEndDate = endDate.toISOString().split("T")[0];
@@ -40,7 +57,7 @@ const AdminLaporan = () => {
   return (
     <Box>
       <Box border={"1px"} p={"10px"} mb={"10px"}>
-        <Center height={"40vh"}>
+        <Center height={"40vh"} id="transaction-graph">
           <AdminLaporanChart transactionGraph={transactionGraph} />
         </Center>
         <Flex justify="center" mt={4}>
@@ -50,8 +67,13 @@ const AdminLaporan = () => {
           <Box ml={4} p={2} borderRadius={"full"} outline={"1px solid red"}>
             <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
           </Box>
+          <Button ml={4} colorScheme="red" onClick={handlePrint}>
+            Print Sales Report
+          </Button>
         </Flex>
-        <AdminLaporanPenjualan transactionItem={transactionItem} />
+        <Box id="product-sold-table">
+          <AdminLaporanPenjualan transactionItem={transactionItem} />
+        </Box>
       </Box>
     </Box>
   );

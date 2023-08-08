@@ -32,12 +32,29 @@ const categoryController = {
     }
   },
 
+  getActiveCategory: async (req, res) => {
+    try {
+      const { limit = 7, page = 1, order = "ASC", orderBy = "createdAt" } = req.query;
+      const pagination = setPagination(limit, page);
+      const totalCategory = await category.count({ where: { isActive: true } });
+      const totalPage = Math.ceil(totalCategory / +limit);
+      const result = await category.findAll({ where: { isActive: true }, ...pagination });
+      const coba = { page, limit, totalCategory, totalPage, result };
+      return res.status(200).json({ message: "success", ...coba });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  },
+
   deleteCategory: async (req, res) => {
     try {
       const { id } = req.params;
+      const { isActive } = req.body;
       db.sequelize.transaction(async (t) => {
-        await category.destroy({ where: { id } }, { transaction: t });
-        return res.status(200).json({ message: "category berhasil dihapus" });
+        await category.update({ isActive }, { where: { id } }, { transaction: t });
+        if (isActive) return res.status(200).json({ message: "Category telah diaktifkan" });
+
+        return req.status(200).json({ message: "Category telah dinonaktifkan" });
       });
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -46,12 +63,17 @@ const categoryController = {
 
   editCategory: async (req, res) => {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, isActive } = req.body;
+    console.log(isActive);
+    const updateClause = {};
+    if (isActive || !isActive) updateClause.isActive = isActive;
+    if (name) updateClause.name = name;
+    console.log(updateClause);
     try {
       db.sequelize.transaction(async (t) => {
-        await category.update({ name }, { where: { id } }, { transaction: t });
+        await category.update(updateClause, { where: { id } }, { transaction: t });
       });
-      return res.status(200).json({ message: "category berhasil diedit" });
+      return res.status(200).json({ name: "category berhasil diedit" });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
