@@ -16,19 +16,20 @@ export const Produk = () => {
   const [query, setQuery] = useState({});
   const handleCategory = (e) => {
     const category = e.target.value;
-    dispatch(getProduk({ category }));
+    setQuery({ ...query, category });
   };
 
   const handleOrderBy = (e) => {
     const selectedValue = e.target.value;
     const [order, orderBy] = selectedValue.split("|");
-    dispatch({ order, orderBy });
+    setQuery({ ...query, order, orderBy });
   };
 
   useEffect(() => {
-    dispatch(getActiveProduk({ index }));
+    const { category, order, orderBy } = query;
+    dispatch(getActiveProduk({ index, category, order, orderBy }));
     dispatch(getCategoryAll({}));
-  }, [index]);
+  }, [index, query]);
 
   return (
     <Flex mt={"5px"} ml={"20px"} justifyContent={"space-between"}>
@@ -42,8 +43,7 @@ export const Produk = () => {
             width={"20vw"}
             focusBorderColor="#FC2947"
             name="category"
-            onChange={handleCategory}
-          >
+            onChange={handleCategory}>
             {category.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -55,12 +55,11 @@ export const Produk = () => {
             placeholder="Urutkan Berdasarkan"
             focusBorderColor="#FC2947"
             name="orderBy"
-            onChange={handleOrderBy}
-          >
-            <option value="ASC|harga_produk">Harga Tertinggi</option>
-            <option value="DESC|harga_produk">Harga Terendah</option>
-            <option value="ASC">A - Z</option>
-            <option value="DESC">Z - A</option>
+            onChange={handleOrderBy}>
+            <option value="DESC|harga_produk">Harga Tertinggi</option>
+            <option value="ASC|harga_produk">Harga Terendah</option>
+            <option value="DESC">A - Z</option>
+            <option value="ASC">Z - A</option>
           </Select>
         </Flex>
         <Box h={"80vh"} w={"90vw"}>

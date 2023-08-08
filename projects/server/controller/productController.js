@@ -72,17 +72,21 @@ const productController = {
       console.log(req.file);
       if (!req.file) return res.status(400).json({ message: "file gamebar harus ada" });
       console.log(name, categoryId, description, modal_produk, harga_produk, quantity);
-      const result = await product.create({
-        name,
-        categoryId,
-        description,
-        modal_produk,
-        harga_produk,
-        quantity,
-        productImg: req.file.path,
+      db.sequelize.transaction(async (t) => {
+        const result = await product.create(
+          {
+            name,
+            categoryId,
+            description,
+            modal_produk,
+            harga_produk,
+            quantity,
+            productImg: req.file.path,
+          },
+          { transaction: t }
+        );
+        return res.status(200).json({ message: "success", result });
       });
-
-      return res.status(200).json({ message: "success", result });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -106,8 +110,10 @@ const productController = {
         });
         updateClause.productImg = req.file.path;
       }
-      await product.update(updateClause, { where: { id: req.params.id } });
-      return res.status(200).json({ message: "update berhasil" });
+      db.sequelize.transaction(async (t) => {
+        await product.update(updateClause, { where: { id: req.params.id } }, { transaction: t });
+        return res.status(200).json({ message: "update berhasil" });
+      });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

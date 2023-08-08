@@ -1,5 +1,3 @@
-import Toast from "../../component/toast";
-
 const { createSlice } = require("@reduxjs/toolkit");
 const axios = require("axios");
 
@@ -21,8 +19,7 @@ export const authreducer = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      const { id, username, email, role, isActive, imgProfile } =
-        action.payload;
+      const { id, username, email, role, isActive, imgProfile } = action.payload;
       state.user = {
         id,
         username,
@@ -50,13 +47,10 @@ export const authreducer = createSlice({
 export const Signinreducer = (values, navigate) => {
   return async (dispatch) => {
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/login`,
-        {
-          username: values.username,
-          password: values.password,
-        }
-      );
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/pos-kasir/login`, {
+        username: values.username,
+        password: values.password,
+      });
       const token = res.data.token;
       localStorage.setItem("token", token);
       dispatch(loginSuccess());
@@ -73,14 +67,11 @@ export const cekLogin = () => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/pos-kasir/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch(setUser(res.data.cekUser));
     } catch (err) {
       alert("Anda Logout");
@@ -93,15 +84,11 @@ export const changePicture = (photo) => {
     const formData = new FormData();
     formData.append("imgProfile", photo);
     try {
-      const respon = await axios.patch(
-        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/ganti-avatar`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const respon = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/pos-kasir/ganti-avatar`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       alert("ganti avatas sukses");
       document.location.href = "/home";
     } catch (error) {
@@ -115,14 +102,11 @@ export const getCashiers = () => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/all`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/pos-kasir/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch(setCashiers(res.data.result));
     } catch (err) {
       alert(err.message);
@@ -155,15 +139,11 @@ export const registerCashier = (data) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/register`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/pos-kasir/register`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       alert(res.data.message);
       console.log(res.data.message);
     } catch (err) {
@@ -172,6 +152,5 @@ export const registerCashier = (data) => {
   };
 };
 
-export const { setUser, loginSuccess, logoutSuccess, setCashiers } =
-  authreducer.actions;
+export const { setUser, loginSuccess, logoutSuccess, setCashiers } = authreducer.actions;
 export default authreducer.reducer;
