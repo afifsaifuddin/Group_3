@@ -1,7 +1,9 @@
 const db = require("../models");
 const product = db.Product;
+const category = db.Category;
 const fs = require("fs").promises;
 
+const databaseActive = [{ model: db.Category, attributes: ["name"], where: { isActive: true } }];
 const database = [{ model: db.Category, attributes: ["name"] }];
 const setPagination = (limit, page) => {
   const offset = (page - 1) * +limit;
@@ -24,6 +26,7 @@ const productController = {
         where,
         include: database,
         order: [[orderBy, order]],
+
         ...pagination,
       });
       const coba = { page, limit, totalProduct, totalPage, result };
@@ -46,14 +49,14 @@ const productController = {
     try {
       const result = await product.findAll({
         where: { ...where, isActive: true },
-        include: database,
+        include: databaseActive,
         order: [[orderBy, order]],
         ...pagination,
       });
       const coba = { page, limit, totalProduct, totalPage, result };
       return res.status(200).json({ message: "success", ...coba });
     } catch (err) {
-      return req.status(500).json({ message: err.message });
+      return res.status(500).json({ message: err.message });
     }
   },
   getProdukbyId: async (req, res) => {

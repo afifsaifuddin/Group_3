@@ -8,7 +8,8 @@ router.get("/", productController.getProdukQuery);
 router.get("/active", productController.getActiveProduct);
 router.get("/:id", productController.getProdukbyId);
 router.post(
-  "/upload",
+  "/",
+
   multerUpload.single("productImg"),
   verifyToken,
   cekRole,
@@ -17,12 +18,6 @@ router.post(
   productController.uploadProduk
 );
 
-router.patch(
-  "/updateProduk/:id",
-  multerUpload.single("productImg"),
-  verifyToken,
-  cekRole,
-  productController.updateProduk
-);
+router.patch("/:id", multerUpload.single("productImg"), verifyToken, cekRole, productController.updateProduk);
 
 module.exports = router;

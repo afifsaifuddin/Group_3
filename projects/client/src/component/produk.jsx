@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import CardProduk from "./produkCard.";
 import { useDispatch, useSelector } from "react-redux";
 import { getActiveProduk, getProduk } from "../redux/reducer/produkreducer";
-import { getCategoryAll } from "../redux/reducer/categoryreducer";
+import { getActiveCategoryAll, getCategoryAll } from "../redux/reducer/categoryreducer";
 import { Pagination } from "./pagination";
 import Searchbar from "./searchbar";
 import ButtonCart from "./buttonCart";
@@ -28,7 +28,7 @@ export const Produk = () => {
   useEffect(() => {
     const { category, order, orderBy } = query;
     dispatch(getActiveProduk({ index, category, order, orderBy }));
-    dispatch(getCategoryAll({}));
+    dispatch(getActiveCategoryAll({}));
   }, [index, query]);
 
   return (

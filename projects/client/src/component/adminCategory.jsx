@@ -10,6 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Switch,
   Table,
   Tbody,
   Td,
@@ -33,15 +34,20 @@ export const AdminCategory = () => {
   const [index, setIndex] = useState(1);
 
   const dispatch = useDispatch();
-  const handleUpdate = async (id, name) => {
-    await dispatch(updateCategory(id, name));
+  const handleUpdate = async (id, name, isActive) => {
+    await dispatch(updateCategory(id, name, isActive));
     await dispatch(getCategory({ index }));
     onClose();
   };
 
   useEffect(() => {
     dispatch(getCategory({ index }));
+    console.log(modalCategory);
   }, [index]);
+
+  const switchChange = (e) => {
+    setModalCategory({ ...modalCategory, isActive: e });
+  };
 
   const { page } = useSelector((state) => state.categoryreducer);
 
@@ -55,6 +61,7 @@ export const AdminCategory = () => {
           <Tr>
             <Th>Id</Th>
             <Th>Name</Th>
+            <Th>Tampilkan</Th>
             <Th>Action</Th>
           </Tr>
         </Thead>
@@ -63,6 +70,7 @@ export const AdminCategory = () => {
             <Tr key={item.id}>
               <Td>{item.id}</Td>
               <Td>{item.name}</Td>
+              <Td>{item.isActive ? "Ya" : "Tidak"}</Td>
               <Td>
                 <Button
                   colorScheme="red"
@@ -90,6 +98,7 @@ export const AdminCategory = () => {
               <Thead>
                 <Tr>
                   <Th>Name</Th>
+                  <Th>isActive</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -103,6 +112,9 @@ export const AdminCategory = () => {
                       }}
                     />
                   </Td>
+                  <Td>
+                    <Switch isChecked={modalCategory.isActive} onChange={() => switchChange(!modalCategory.isActive)} />
+                  </Td>
                 </Tr>
               </Tbody>
             </Table>
@@ -112,7 +124,7 @@ export const AdminCategory = () => {
               colorScheme="red"
               mr={3}
               onClick={() => {
-                handleUpdate(modalCategory.id, newname);
+                handleUpdate(modalCategory.id, newname, modalCategory.isActive);
               }}>
               SAVE
             </Button>

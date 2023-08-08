@@ -14,12 +14,7 @@ const setPagination = (limit, page) => {
 const transactionController = {
   getAll: async (req, res) => {
     try {
-      const {
-        limit = 9,
-        page = 1,
-        order = "DESC",
-        orderBy = "createdAt",
-      } = req.query;
+      const { limit = 9, page = 1, order = "DESC", orderBy = "createdAt" } = req.query;
       const pagination = setPagination(limit, page);
       const totalTransaction = await transaction.count({});
       const totalPage = Math.ceil(totalTransaction / +limit);
@@ -54,10 +49,7 @@ const transactionController = {
     const { id } = req.user;
     try {
       db.sequelize.transaction(async (t) => {
-        const result = await transaction.create(
-          { userId: id, totalPrice: req.body.totalharga },
-          { transaction: t }
-        );
+        const result = await transaction.create({ userId: id, totalPrice: req.body.totalharga }, { transaction: t });
         return res.status(200).json({ message: "success", result });
       });
     } catch (err) {
@@ -95,10 +87,7 @@ const transactionController = {
       const result = await transaction.findAll({
         where: {
           createdAt: {
-            [Op.between]: [
-              new Date(startDate),
-              new Date(endDate).setHours(23, 59, 59),
-            ],
+            [Op.between]: [new Date(startDate), new Date(endDate).setHours(23, 59, 59)],
           },
         },
         attributes: [
@@ -122,10 +111,7 @@ const transactionController = {
       const result = await transaction.findAll({
         where: {
           createdAt: {
-            [Op.between]: [
-              new Date(startDate).setHours(0, 0, 0),
-              new Date(endDate).setHours(23, 59, 59),
-            ],
+            [Op.between]: [new Date(startDate).setHours(0, 0, 0), new Date(endDate).setHours(23, 59, 59)],
           },
         },
         include: database,
@@ -145,24 +131,11 @@ const transactionController = {
         include: [
           {
             model: transaction,
-            where: {
-              createdAt: {
-                [Op.between]: [
-                  new Date(startDate),
-                  new Date(endDate).setHours(23, 59, 59),
-                ],
-              },
-            },
+            where: { createdAt: { [Op.between]: [new Date(startDate), new Date(endDate).setHours(23, 59, 59)] } },
           },
           { model: product },
         ],
-        attributes: [
-          "productId",
-          [
-            sequelize.fn("sum", sequelize.col("transactionitem.quantity")),
-            "totalQuantity",
-          ],
-        ],
+        attributes: ["productId", [sequelize.fn("sum", sequelize.col("transactionitem.quantity")), "totalQuantity"]],
         group: ["productId", "Transaction.id"],
       });
       return res.status(200).json({ message: "success", result });
