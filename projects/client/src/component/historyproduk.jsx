@@ -33,6 +33,8 @@ const Historyproduk = ({ item }) => {
   };
   console.log(dataTransaction);
 
+  if (!item) return <></>;
+
   return (
     <Box>
       <Button variant={"link"} onClick={handleOpen}>

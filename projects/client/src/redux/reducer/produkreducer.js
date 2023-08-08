@@ -212,15 +212,18 @@ export const createTransaction =
   };
 
 export const getTransaction =
-  ({ index = 1, selectedDate }) =>
+  ({ startDate, endDate }) =>
   async (dispatch) => {
+    console.log(startDate, endDate);
+    const token = localStorage.getItem("token");
     try {
-      const dateParam = selectedDate
-        ? `&date=${selectedDate.toISOString()}`
-        : "";
       const res = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/transaction/?page=${index}${dateParam}`
+        `${process.env.REACT_APP_API_BASE_URL}/transaction/filterdate?startDate=${startDate}&endDate=${endDate}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
+      console.log("ini get transction", res.data.result);
       dispatch(setTransaction(res.data.result));
       dispatch(setPage(res.data.totalPage));
     } catch (err) {

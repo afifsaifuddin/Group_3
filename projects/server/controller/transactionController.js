@@ -14,7 +14,12 @@ const setPagination = (limit, page) => {
 const transactionController = {
   getAll: async (req, res) => {
     try {
-      const { limit = 9, page = 1, order = "DESC", orderBy = "createdAt" } = req.query;
+      const {
+        limit = 9,
+        page = 1,
+        order = "DESC",
+        orderBy = "createdAt",
+      } = req.query;
       const pagination = setPagination(limit, page);
       const totalTransaction = await transaction.count({});
       const totalPage = Math.ceil(totalTransaction / +limit);
@@ -48,7 +53,10 @@ const transactionController = {
   create: async (req, res) => {
     const { id } = req.user;
     try {
-      const result = await transaction.create({ userId: id, totalPrice: req.body.totalharga });
+      const result = await transaction.create({
+        userId: id,
+        totalPrice: req.body.totalharga,
+      });
       return res.status(200).json({ message: "success", result });
     } catch (err) {
       return res.status(500).json({ message: err.message });
@@ -100,6 +108,28 @@ const transactionController = {
     }
   },
 
+  getTransactionbyDate: async (req, res) => {
+    try {
+      const { startDate, endDate } = req.query;
+
+      const result = await transaction.findAll({
+        where: {
+          createdAt: {
+            [Op.between]: [
+              new Date(startDate).setHours(0, 0, 0),
+              new Date(endDate).setHours(23, 59, 59),
+            ],
+          },
+        },
+        include: database,
+      });
+      return res.status(200).json({ message: "success", result });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
+    }
+  },
+
   transactionItemDate: async (req, res) => {
     try {
       const { startDate, endDate } = req.query;
@@ -107,11 +137,21 @@ const transactionController = {
         include: [
           {
             model: transaction,
-            where: { createdAt: { [Op.between]: [new Date(startDate), new Date(endDate)] } },
+            where: {
+              createdAt: {
+                [Op.between]: [new Date(startDate), new Date(endDate)],
+              },
+            },
           },
           { model: product },
         ],
-        attributes: ["productId", [sequelize.fn("sum", sequelize.col("transactionitem.quantity")), "totalQuantity"]],
+        attributes: [
+          "productId",
+          [
+            sequelize.fn("sum", sequelize.col("transactionitem.quantity")),
+            "totalQuantity",
+          ],
+        ],
         group: ["productId", "Transaction.id"],
       });
 

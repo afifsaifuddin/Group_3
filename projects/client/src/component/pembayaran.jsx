@@ -23,12 +23,22 @@ export const Pembayaran = ({ isOpen, onClose }) => {
   const totalharga = useSelector((state) => state.produkreducer.totalharga);
   const dispatch = useDispatch();
   const itemCarts = useSelector((state) => state.produkreducer.cart);
+
+  const handleKembalian = () => {
+    // setKembalian(totalharga - bayar);
+    return bayar - totalharga;
+  };
   const handlepembayaran = async () => {
-    const total = bayar - totalharga;
-    setKembalian(total);
-    await dispatch(createTransaction(totalharga, itemCarts));
-    await dispatch(getActiveProduk({}));
-    await dispatch(deleteCart());
+    if (bayar >= totalharga) {
+      const kembalian = handleKembalian();
+      await dispatch(createTransaction(totalharga, itemCarts));
+      await dispatch(getActiveProduk({}));
+      await dispatch(deleteCart());
+      setKembalian(kembalian);
+      onClose();
+    } else {
+      alert("Uang tidak cukup");
+    }
   };
 
   return (
@@ -46,18 +56,18 @@ export const Pembayaran = ({ isOpen, onClose }) => {
             <Text align={"center"} fontWeight={"bold"}>
               Rp. {totalharga}
             </Text>
+            <Text align={"center"} fontWeight={"bold"}>
+              Kembalian: Rp. {handleKembalian()}
+            </Text>
             <Input
               placeholder="Jumlah Uang"
               type="number"
-              onChange={(e) => setBayar(e.target.value)}
+              onChange={(e) => setBayar(parseInt(e.target.value))}
               focusBorderColor="#FC2947"
             />
             <Button bgColor={"#FC2947"} onClick={handlepembayaran}>
               Bayar
             </Button>
-            <Text align={"center"} fontWeight={"bold"}>
-              Kembalian: Rp. {kembalian}
-            </Text>
           </Stack>
         </ModalContent>
       </Modal>
