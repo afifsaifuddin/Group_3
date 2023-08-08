@@ -33,7 +33,9 @@ const produkReducer = createSlice({
     },
     deleteItem: (state, action) => {
       const productId = action.payload;
-      const existingItemIndex = state.cart.findIndex((item) => item.id === productId);
+      const existingItemIndex = state.cart.findIndex(
+        (item) => item.id === productId
+      );
       if (existingItemIndex !== -1) {
         const deletedItem = state.cart[existingItemIndex];
         state.totalharga -= deletedItem.harga_produk * deletedItem.quantity;
@@ -56,7 +58,9 @@ const produkReducer = createSlice({
       const existingItem = state.cart.find((item) => item.id === productId);
 
       if (existingItem && existingItem.quantity === 1) {
-        const existingItemIndex = state.cart.findIndex((item) => item.id === productId);
+        const existingItemIndex = state.cart.findIndex(
+          (item) => item.id === productId
+        );
         if (existingItemIndex !== -1) {
           state.cart.splice(existingItemIndex, 1);
           state.totalharga -= existingItem.harga_produk;
@@ -84,7 +88,14 @@ const produkReducer = createSlice({
 });
 
 export const getProduk =
-  ({ index = 1, name = "", category = "", order = "ASC", limit = 9, orderBy = "createdAt" }) =>
+  ({
+    index = 1,
+    name = "",
+    category = "",
+    order = "ASC",
+    limit = 9,
+    orderBy = "createdAt",
+  }) =>
   async (dispatch) => {
     try {
       console.log(category, order, orderBy);
@@ -99,7 +110,14 @@ export const getProduk =
   };
 
 export const getActiveProduk =
-  ({ index = 1, name = "", category = "", order = "ASC", limit = 9, orderBy = "createdAt" }) =>
+  ({
+    index = 1,
+    name = "",
+    category = "",
+    order = "ASC",
+    limit = 9,
+    orderBy = "createdAt",
+  }) =>
   async (dispatch) => {
     try {
       console.log(category, order, orderBy);
@@ -123,9 +141,13 @@ export const updateProduk = (data, id, file) => {
       formData.append(key, data[key]);
     }
     try {
-      const res = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/product/updateProduk/${id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.patch(
+        `${process.env.REACT_APP_API_BASE_URL}/product/updateProduk/${id}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Update Product Success");
     } catch (error) {
       alert("Update Product Failed");
@@ -143,9 +165,13 @@ export const createProduct = (data, file) => {
     }
     formData.append("productImg", file);
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/product/upload`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/product/upload`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Create Product Success");
     } catch (error) {
       alert("Create Product Failed");
@@ -153,43 +179,48 @@ export const createProduct = (data, file) => {
   };
 };
 
-export const createTransaction = (totalharga, itemCarts) => async (dispatch) => {
-  try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/transaction/`,
-      { totalharga },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    const transactionId = res.data.result.id;
-    itemCarts.forEach(async (item) => {
-      try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_BASE_URL}/transaction/item`,
-          { item, transactionId },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    });
-    alert("transaction berhasil");
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const createTransaction =
+  (totalharga, itemCarts) => async (dispatch) => {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/transaction/`,
+        { totalharga },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      const transactionId = res.data.result.id;
+      itemCarts.forEach(async (item) => {
+        try {
+          const res = await axios.post(
+            `${process.env.REACT_APP_API_BASE_URL}/transaction/item`,
+            { item, transactionId },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      });
+      alert("transaction berhasil");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const getTransaction =
   ({ index = 1, selectedDate }) =>
   async (dispatch) => {
     try {
-      const dateParam = selectedDate ? `&date=${selectedDate.toISOString()}` : "";
-      const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/transaction/?page=${index}${dateParam}`);
+      const dateParam = selectedDate
+        ? `&date=${selectedDate.toISOString()}`
+        : "";
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/transaction/?page=${index}${dateParam}`
+      );
       dispatch(setTransaction(res.data.result));
       dispatch(setPage(res.data.totalPage));
     } catch (err) {
@@ -199,7 +230,9 @@ export const getTransaction =
 
 export const getTransactionId = (id) => async (dispatch) => {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/transaction/${id}`);
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_BASE_URL}/transaction/${id}`
+    );
     return res.data.result;
   } catch (err) {
     console.log(err);

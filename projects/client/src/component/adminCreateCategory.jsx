@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  FormControl,
+  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -8,28 +10,38 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Tab,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
+  Text, // Tambahkan impor ini
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { createCategory, getCategory } from "../redux/reducer/categoryreducer";
+import Toast from "./toast";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 export const AdminCreateCategory = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
-  const handleCreateCategory = async () => {
-    const name = document.getElementById("name").value;
-    await dispatch(createCategory(name));
-    await dispatch(getCategory());
-    onClose();
-  };
+
+  const categorySchema = Yup.object().shape({
+    name: Yup.string().required("Nama harus diisi"),
+  });
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+    },
+    validationSchema: categorySchema,
+    onSubmit: async (values) => {
+      try {
+        await dispatch(createCategory(values.name));
+        await dispatch(getCategory());
+        onClose();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
 
   return (
     <Box>
@@ -40,25 +52,29 @@ export const AdminCreateCategory = () => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add New Category</ModalHeader>
-          <ModalBody>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th>Name</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr>
-                  <Td>
-                    <Input placeholder="Category Name" id="name"></Input>
-                  </Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={handleCreateCategory}>SAVE</Button>
-          </ModalFooter>
+          <form onSubmit={formik.handleSubmit}>
+            <ModalBody>
+              <FormControl
+                isInvalid={formik.errors.name && formik.touched.name}
+              >
+                <FormLabel htmlFor="name" fontSize={"bold"}>
+                  Category Name
+                </FormLabel>
+                <Input
+                  placeholder="Category Name"
+                  id="name"
+                  onChange={formik.handleChange}
+                  value={formik.values.name}
+                />
+                {formik.touched.name && formik.errors.name ? (
+                  <Text color="red">{formik.errors.name}</Text>
+                ) : null}
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button type="submit">SAVE</Button>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </Box>
