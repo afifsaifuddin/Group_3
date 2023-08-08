@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 export const AdminCreateproduct = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
-  const category = useSelector((state) => state.produkreducer.category);
+  const category = useSelector((state) => state.categoryreducer.category);
   const [urlImage, setUrlImage] = useState("");
   const handleImage = (e) => {
     const [file] = document.getElementById("image").files;
@@ -65,13 +65,7 @@ export const AdminCreateproduct = () => {
                   objectFit={"cover"}
                   overflow={"hidden"}
                 />
-                <Input
-                  type="file"
-                  id="image"
-                  variant={""}
-                  onChange={handleImage}
-                  alt="Product Image"
-                />
+                <Input type="file" id="image" variant={""} onChange={handleImage} alt="Product Image" />
               </Box>
               <Box>
                 <Text fontWeight={"bold"} mb={"10px"}>

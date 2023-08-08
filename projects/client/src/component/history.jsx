@@ -1,18 +1,4 @@
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Heading,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Heading, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTransaction } from "../redux/reducer/produkreducer";
@@ -47,13 +33,9 @@ export const History = () => {
         <Thead>
           <Flex gap={"10px"}>
             <Text>Set Date</Text>
-            <DatePicker
-              selected={selectedDate}
-              onChange={handleDateChange}
-              placeholderText="Select a date"
-            />
+            <DatePicker selected={selectedDate} onChange={handleDateChange} placeholderText="Select a date" />
           </Flex>
-          ;
+
           <Tr>
             <Th>
               <Flex justifyContent={"space-around"}>Transaksi Terbaru</Flex>
@@ -66,9 +48,7 @@ export const History = () => {
               .filter((item) => {
                 if (!selectedDate) return true;
                 const transactionDate = new Date(item.createdAt); // Use createdAt or transactionDate based on your API response
-                return (
-                  transactionDate.toDateString() === selectedDate.toDateString()
-                );
+                return transactionDate.toDateString() === selectedDate.toDateString();
               })
               .map((item) => <Historyproduk key={item.id} item={item} />)}
         </Tbody>

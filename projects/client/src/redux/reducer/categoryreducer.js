@@ -25,8 +25,8 @@ const categoryreducer = createSlice({
 
 export const getCategoryAll = () => async (dispatch) => {
   try {
-    const res = await axios.get(`http://localhost:8000/category/`);
-    const res2 = await axios.get(`http://localhost:8000/category/?limit=${res.data.totalCategory}`);
+    const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/category/`);
+    const res2 = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/category/?limit=${res.data.totalCategory}`);
     dispatch(setCategory(res2.data.result));
   } catch (error) {
     console.log(error);
@@ -37,7 +37,7 @@ export const getCategory =
   ({ index }) =>
   async (dispatch) => {
     try {
-      const res = await axios.get(`http://localhost:8000/category/?page=${index}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/category/?page=${index}`);
       dispatch(setCategory(res.data.result));
       dispatch(setPage(res.data.totalPage));
     } catch (error) {
@@ -51,7 +51,7 @@ export const updateCategory = (id, name) => {
     const token = localStorage.getItem("token");
     try {
       const res = await axios.patch(
-        `http://localhost:8000/category/${id}`,
+        `${process.env.REACT_APP_API_BASE_URL}/category/${id}`,
         { name },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -70,7 +70,7 @@ export const createCategory = (name) => {
     console.log(name);
     try {
       const res = await axios.post(
-        "http://localhost:8000/category/",
+        `${process.env.REACT_APP_API_BASE_URL}/category/`,
         { name },
         {
           headers: { Authorization: `Bearer ${token}` },
