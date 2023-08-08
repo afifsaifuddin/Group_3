@@ -24,11 +24,11 @@ const { authRouter, productRouter, categoryRouter, transactionRouter } = require
 
 //#region API ROUTES
 
-app.use("/pos-kasir", authRouter);
-app.use("/product", productRouter);
-app.use("/category", categoryRouter);
-app.use("/transaction", transactionRouter);
-app.use("/", express.static(path.resolve(__dirname, "../")));
+app.use("/api/pos-kasir", authRouter);
+app.use("/api/product", productRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/transaction", transactionRouter);
+app.use("/api/", express.static(path.resolve(__dirname, "../")));
 // ===========================
 // NOTE : Add your routes here
 

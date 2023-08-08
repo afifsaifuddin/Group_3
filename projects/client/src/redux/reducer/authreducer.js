@@ -50,10 +50,13 @@ export const authreducer = createSlice({
 export const Signinreducer = (values, navigate) => {
   return async (dispatch) => {
     try {
-      const res = await axios.post("http://localhost:8000/pos-kasir/login", {
-        username: values.username,
-        password: values.password,
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/login`,
+        {
+          username: values.username,
+          password: values.password,
+        }
+      );
       const token = res.data.token;
       localStorage.setItem("token", token);
       dispatch(loginSuccess());
@@ -70,11 +73,14 @@ export const cekLogin = () => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get("http://localhost:8000/pos-kasir/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       dispatch(setUser(res.data.cekUser));
     } catch (err) {
       alert("Anda Logout");
@@ -88,7 +94,7 @@ export const changePicture = (photo) => {
     formData.append("imgProfile", photo);
     try {
       const respon = await axios.patch(
-        "http://localhost:8000/pos-kasir/ganti-avatar",
+        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/ganti-avatar`,
         formData,
         {
           headers: {
@@ -109,11 +115,14 @@ export const getCashiers = () => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get("http://localhost:8000/pos-kasir/all", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/all`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       dispatch(setCashiers(res.data.result));
     } catch (err) {
       alert(err.message);
@@ -127,7 +136,7 @@ export const udpateStatusCashier = (status, id) => {
     console.log(status);
     try {
       const res = await axios.patch(
-        "http://localhost:8000/pos-kasir/active-cashier",
+        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/active-cashier`,
         { id, isActive: status },
         {
           headers: {
@@ -147,7 +156,7 @@ export const registerCashier = (data) => {
     const token = localStorage.getItem("token");
     try {
       const res = await axios.post(
-        "http://localhost:8000/pos-kasir/register",
+        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/register`,
         data,
         {
           headers: {

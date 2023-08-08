@@ -109,7 +109,7 @@ export const AdminProduk = () => {
                   colorScheme="red"
                   onClick={() => {
                     setModalProduk(item);
-                    setUrlImage(`http://localhost:8000/` + item.productImg);
+                    setUrlImage(`${process.env.REACT_APP_API_BASE_URL}/` + item.productImg);
                     onOpen();
                   }}>
                   EDIT

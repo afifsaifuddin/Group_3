@@ -8,7 +8,7 @@ export const AvatarKasir = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   let imgProfile;
-  if (user.imgProfile) imgProfile = "http://localhost:8000/" + user.imgProfile;
+  if (user.imgProfile) imgProfile = `${process.env.REACT_APP_API_BASE_URL}/` + user.imgProfile;
   return (
     <Box mr={"50px"}>
       <Button

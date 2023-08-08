@@ -1,7 +1,9 @@
 const db = require("../models");
+const sequelize = db.sequelize;
 const transaction = db.Transaction;
 const transactionItem = db.TransactionItem;
 const product = db.Product;
+const { Op } = require("sequelize");
 
 const database = [{ model: db.User, attributes: ["username"] }];
 const setPagination = (limit, page) => {
@@ -76,22 +78,47 @@ const transactionController = {
 
   getTransactionDate: async (req, res) => {
     try {
-      const { order = "ASC", orderBy = "createdAt", dateBefore, dateAfter } = req.query;
-
-      const where = {};
-      if (dateBefore) where.createdAt = { [db.Sequelize.Op.gte]: dateBefore };
-      if (dateAfter) where.createdAt = { [db.Sequelize.Op.lte]: dateAfter };
+      const { startDate, endDate } = req.query;
 
       const result = await transaction.findAll({
-        where,
-        attributes: { exclude: ["userId"] },
-        include: database,
-        order: [[orderBy, order]],
+        where: {
+          createdAt: {
+            [Op.between]: [new Date(startDate), new Date(endDate)],
+          },
+        },
+        attributes: [
+          [sequelize.fn("date", sequelize.col("createdAt")), "transactionDate"],
+          [sequelize.fn("sum", sequelize.col("totalPrice")), "totalPrice"],
+        ],
+        group: [sequelize.fn("date", sequelize.col("createdAt"))],
       });
-      console.log(result);
+
       return res.status(200).json({ message: "success", result });
-    } catch (err) {
-      return res.status(500).json({ message: err.message });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
+    }
+  },
+
+  transactionItemDate: async (req, res) => {
+    try {
+      const { startDate, endDate } = req.query;
+      const result = await transactionItem.findAll({
+        include: [
+          {
+            model: transaction,
+            where: { createdAt: { [Op.between]: [new Date(startDate), new Date(endDate)] } },
+          },
+          { model: product },
+        ],
+        attributes: ["productId", [sequelize.fn("sum", sequelize.col("transactionitem.quantity")), "totalQuantity"]],
+        group: ["productId", "Transaction.id"],
+      });
+
+      return res.status(200).json({ message: "success", result });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
     }
   },
 };

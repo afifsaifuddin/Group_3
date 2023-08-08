@@ -7,6 +7,7 @@ const initialState = {
   totalharga: 0,
   page: 0,
   transaction: [],
+  transactionGraph: [],
 };
 
 const produkReducer = createSlice({
@@ -80,6 +81,9 @@ const produkReducer = createSlice({
       state.cart.splice(0, state.cart.length);
       state.totalharga = 0;
     },
+    setTransactionGraph: (state, action) => {
+      state.transactionGraph = [...action.payload];
+    },
   },
 });
 
@@ -96,7 +100,7 @@ export const getProduk =
     try {
       console.log(category, order, orderBy);
       const res = await axios.get(
-        `http://localhost:8000/product/?page=${index}&name=${name}&categoryId=${category}&order=${order}&limit=${limit}&orderBy=${orderBy}`
+        `${process.env.REACT_APP_API_BASE_URL}/product/?page=${index}&name=${name}&categoryId=${category}&order=${order}&limit=${limit}&orderBy=${orderBy}`
       );
       dispatch(setProduk(res.data.result));
       dispatch(setPage(res.data.totalPage));
@@ -118,7 +122,7 @@ export const getActiveProduk =
     try {
       console.log(category, order, orderBy);
       const res = await axios.get(
-        `http://localhost:8000/product/active?page=${index}&name=${name}&categoryId=${category}&order=${order}&limit=${limit}&orderBy=${orderBy}`
+        `${process.env.REACT_APP_API_BASE_URL}/product/active?page=${index}&name=${name}&categoryId=${category}&order=${order}&limit=${limit}&orderBy=${orderBy}`
       );
       console.log(res.data.totalPage);
       dispatch(setProduk(res.data.result));
@@ -138,7 +142,7 @@ export const updateProduk = (data, id, file) => {
     }
     try {
       const res = await axios.patch(
-        `http://localhost:8000/product/updateProduk/${id}`,
+        `${process.env.REACT_APP_API_BASE_URL}/product/updateProduk/${id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -162,7 +166,7 @@ export const createProduct = (data, file) => {
     formData.append("productImg", file);
     try {
       const res = await axios.post(
-        `http://localhost:8000/product/upload`,
+        `${process.env.REACT_APP_API_BASE_URL}/product/upload`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -179,7 +183,7 @@ export const createTransaction =
   (totalharga, itemCarts) => async (dispatch) => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/transaction/",
+        `${process.env.REACT_APP_API_BASE_URL}/transaction/`,
         { totalharga },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -189,7 +193,7 @@ export const createTransaction =
       itemCarts.forEach(async (item) => {
         try {
           const res = await axios.post(
-            "http://localhost:8000/transaction/item",
+            `${process.env.REACT_APP_API_BASE_URL}/transaction/item`,
             { item, transactionId },
             {
               headers: {
@@ -215,7 +219,7 @@ export const getTransaction =
         ? `&date=${selectedDate.toISOString()}`
         : "";
       const res = await axios.get(
-        `http://localhost:8000/transaction/?page=${index}${dateParam}`
+        `${process.env.REACT_APP_API_BASE_URL}/transaction/?page=${index}${dateParam}`
       );
       dispatch(setTransaction(res.data.result));
       dispatch(setPage(res.data.totalPage));
@@ -226,7 +230,9 @@ export const getTransaction =
 
 export const getTransactionId = (id) => async (dispatch) => {
   try {
-    const res = await axios.get(`http://localhost:8000/transaction/${id}`);
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_BASE_URL}/transaction/${id}`
+    );
     return res.data.result;
   } catch (err) {
     console.log(err);
@@ -234,17 +240,17 @@ export const getTransactionId = (id) => async (dispatch) => {
 };
 
 export const getTransactionAdmin =
-  ({ startDateParam, endDateParam }) =>
+  ({ formattedStartDate, formattedEndDate }) =>
   async (dispatch) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/transaction/date/?dateBefore=${startDateParam}&dateAfter=${endDateParam}`,
+        `${process.env.REACT_APP_API_BASE_URL}/transaction/date?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+      dispatch(setTransactionGraph(res.data.result));
       console.log(res.data.result);
-      dispatch(setTransaction(res.data.result));
     } catch (err) {
       console.log(err);
     }
@@ -259,6 +265,7 @@ export const {
   setTransaction,
   incrementQuantity,
   decrementQuantity,
+  setTransactionGraph,
 } = produkReducer.actions;
 
 export default produkReducer.reducer;

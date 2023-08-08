@@ -15,7 +15,6 @@ import {
   createTransaction,
   deleteCart,
   getActiveProduk,
-  getProduk,
 } from "../redux/reducer/produkreducer";
 
 export const Pembayaran = ({ isOpen, onClose }) => {

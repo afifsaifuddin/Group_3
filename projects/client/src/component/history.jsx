@@ -47,12 +47,9 @@ export const History = () => {
         <Thead>
           <Flex gap={"10px"}>
             <Text>Set Date</Text>
-            <DatePicker
-              selected={selectedDate}
-              onChange={handleDateChange}
-              placeholderText="Select a date"
-            />
+            <DatePicker selected={selectedDate} onChange={handleDateChange} placeholderText="Select a date" />
           </Flex>
+
           <Tr>
             <Th>
               <Flex justifyContent={"space-around"}>Transaksi Terbaru</Flex>
@@ -65,9 +62,7 @@ export const History = () => {
               .filter((item) => {
                 if (!selectedDate) return true;
                 const transactionDate = new Date(item.createdAt); // Use createdAt or transactionDate based on your API response
-                return (
-                  transactionDate.toDateString() === selectedDate.toDateString()
-                );
+                return transactionDate.toDateString() === selectedDate.toDateString();
               })
               .map((item) => <Historyproduk key={item.id} item={item} />)}
         </Tbody>

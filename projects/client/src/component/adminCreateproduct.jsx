@@ -65,13 +65,7 @@ export const AdminCreateproduct = () => {
                   objectFit={"cover"}
                   overflow={"hidden"}
                 />
-                <Input
-                  type="file"
-                  id="image"
-                  variant={""}
-                  onChange={handleImage}
-                  alt="Product Image"
-                />
+                <Input type="file" id="image" variant={""} onChange={handleImage} alt="Product Image" />
               </Box>
               <Box>
                 <Text fontWeight={"bold"} mb={"10px"}>
