@@ -104,6 +104,25 @@ const transactionController = {
     }
   },
 
+  getTransactionbyDate: async (req, res) => {
+    try {
+      const { startDate, endDate } = req.query;
+
+      const result = await transaction.findAll({
+        where: {
+          createdAt: {
+            [Op.between]: [new Date(startDate).setHours(0, 0, 0), new Date(endDate).setHours(23, 59, 59)],
+          },
+        },
+        include: database,
+      });
+      return res.status(200).json({ message: "success", result });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
+    }
+  },
+
   transactionItemDate: async (req, res) => {
     try {
       const { startDate, endDate } = req.query;

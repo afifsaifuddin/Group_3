@@ -14,11 +14,9 @@ const transactionreducer = createSlice({
     setTransaction: (state, action) => {
       state.transaction = [...action.payload];
     },
-
     setTransactionItem: (state, action) => {
       state.transactionItem = [...action.payload];
     },
-
     setTransactionGraph: (state, action) => {
       state.transactionGraph = [...action.payload];
     },
@@ -31,12 +29,15 @@ export const getTransactionItem =
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_API_BASE_URL}/transaction/dateItem?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
       dispatch(setTransactionItem(res.data.result));
     } catch (err) {
       console.log(err);
     }
   };
-export const { setTransaction, setTransactionItem, setTransactionGraph } = transactionreducer.actions;
+export const { setTransaction, setTransactionItem, setTransactionGraph } =
+  transactionreducer.actions;
 export default transactionreducer.reducer;
