@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 export const AdminCreateproduct = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
-  const category = useSelector((state) => state.produkreducer.category);
+  const category = useSelector((state) => state.categoryreducer.category);
   const [urlImage, setUrlImage] = useState("");
   const handleImage = (e) => {
     const [file] = document.getElementById("image").files;
@@ -88,7 +88,7 @@ export const AdminCreateproduct = () => {
                 <Select id="kategori">
                   {category.map((item) => (
                     <option key={item.id} value={item.id}>
-                      {item.name}{" "}
+                      {item.name}
                     </option>
                   ))}
                 </Select>

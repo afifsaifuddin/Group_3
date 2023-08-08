@@ -27,6 +27,7 @@ import { useDispatch } from "react-redux";
 import { Signinreducer } from "../redux/reducer/authreducer";
 import { Modalforgotpass } from "./forgotpassword";
 import { useNavigate } from "react-router-dom";
+import Toast from "./toast";
 
 const loginschema = Yup.object().shape({
   username: Yup.string().required("Username harus diisi"),
@@ -53,6 +54,7 @@ export default function Signin() {
     validationSchema: loginschema,
     onSubmit: (values) => {
       dispatch(Signinreducer(values, navigate));
+      onClose();
     },
   });
 

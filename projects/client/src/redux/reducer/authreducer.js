@@ -1,3 +1,5 @@
+import Toast from "../../component/toast";
+
 const { createSlice } = require("@reduxjs/toolkit");
 const axios = require("axios");
 
@@ -19,7 +21,8 @@ export const authreducer = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      const { id, username, email, role, isActive, imgProfile } = action.payload;
+      const { id, username, email, role, isActive, imgProfile } =
+        action.payload;
       state.user = {
         id,
         username,
@@ -84,11 +87,15 @@ export const changePicture = (photo) => {
     const formData = new FormData();
     formData.append("imgProfile", photo);
     try {
-      const respon = await axios.patch("http://localhost:8000/pos-kasir/ganti-avatar", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const respon = await axios.patch(
+        "http://localhost:8000/pos-kasir/ganti-avatar",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert("ganti avatas sukses");
       document.location.href = "/home";
     } catch (error) {
@@ -139,11 +146,15 @@ export const registerCashier = (data) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.post("http://localhost:8000/pos-kasir/register", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.post(
+        "http://localhost:8000/pos-kasir/register",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert(res.data.message);
       console.log(res.data.message);
     } catch (err) {
@@ -152,5 +163,6 @@ export const registerCashier = (data) => {
   };
 };
 
-export const { setUser, loginSuccess, logoutSuccess, setCashiers } = authreducer.actions;
+export const { setUser, loginSuccess, logoutSuccess, setCashiers } =
+  authreducer.actions;
 export default authreducer.reducer;

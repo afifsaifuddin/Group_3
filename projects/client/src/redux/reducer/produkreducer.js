@@ -62,6 +62,7 @@ const produkReducer = createSlice({
         );
         if (existingItemIndex !== -1) {
           state.cart.splice(existingItemIndex, 1);
+          state.totalharga -= existingItem.harga_produk;
         }
       } else if (existingItem && existingItem.quantity > 1) {
         existingItem.quantity -= 1;
@@ -77,6 +78,7 @@ const produkReducer = createSlice({
     },
     deleteCart: (state, action) => {
       state.cart.splice(0, state.cart.length);
+      state.totalharga = 0;
     },
   },
 });

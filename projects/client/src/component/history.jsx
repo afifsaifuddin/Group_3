@@ -53,7 +53,6 @@ export const History = () => {
               placeholderText="Select a date"
             />
           </Flex>
-          ;
           <Tr>
             <Th>
               <Flex justifyContent={"space-around"}>Transaksi Terbaru</Flex>
