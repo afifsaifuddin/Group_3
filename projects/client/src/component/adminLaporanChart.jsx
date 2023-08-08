@@ -23,6 +23,7 @@ const AdminLaporanChart = ({ transactionGraph }) => {
             {
               label: "Total Sales",
               data: chartData,
+              backgroundColor: "red",
             },
           ],
         },

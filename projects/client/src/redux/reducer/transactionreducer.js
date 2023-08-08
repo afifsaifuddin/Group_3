@@ -34,7 +34,6 @@ export const getTransactionItem =
         }
       );
       dispatch(setTransactionItem(res.data.result));
-      console.log(res.data.result);
     } catch (err) {
       console.log(err);
     }

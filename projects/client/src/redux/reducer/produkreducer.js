@@ -94,7 +94,7 @@ export const getProduk =
     category = "",
     order = "ASC",
     limit = 9,
-    orderBy = "createdAt",
+    orderBy = "name",
   }) =>
   async (dispatch) => {
     try {
@@ -116,7 +116,7 @@ export const getActiveProduk =
     category = "",
     order = "ASC",
     limit = 9,
-    orderBy = "createdAt",
+    orderBy = "name",
   }) =>
   async (dispatch) => {
     try {
@@ -124,7 +124,6 @@ export const getActiveProduk =
       const res = await axios.get(
         `${process.env.REACT_APP_API_BASE_URL}/product/active?page=${index}&name=${name}&categoryId=${category}&order=${order}&limit=${limit}&orderBy=${orderBy}`
       );
-      console.log(res.data.totalPage);
       dispatch(setProduk(res.data.result));
       dispatch(setPage(res.data.totalPage));
     } catch (error) {
@@ -253,7 +252,6 @@ export const getTransactionAdmin =
         }
       );
       dispatch(setTransactionGraph(res.data.result));
-      console.log(res.data.result);
     } catch (err) {
       console.log(err);
     }
