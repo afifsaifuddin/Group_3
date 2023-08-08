@@ -37,7 +37,7 @@ export const CardProduk = ({ produk }) => {
             loading="lazy"
             objectFit="cover"
             maxW={{ base: "100%", sm: "200px" }}
-            src={"http://localhost:8000/" + produk.productImg}
+            src={`${process.env.REACT_APP_API_BASE_URL}/` + produk.productImg}
             alt={produk.categoryId}
             borderRadius={"8px"}
           />

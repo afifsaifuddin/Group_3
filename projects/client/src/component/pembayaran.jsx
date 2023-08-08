@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createTransaction,
   deleteCart,
-  getProduk,
+  getActiveProduk,
 } from "../redux/reducer/produkreducer";
 
 export const Pembayaran = ({ isOpen, onClose }) => {
@@ -27,7 +27,7 @@ export const Pembayaran = ({ isOpen, onClose }) => {
     const total = bayar - totalharga;
     setKembalian(total);
     await dispatch(createTransaction(totalharga, itemCarts));
-    await dispatch(getProduk({}));
+    await dispatch(getActiveProduk({}));
     await dispatch(deleteCart());
   };
 
