@@ -1,31 +1,37 @@
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from "@chakra-ui/react";
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 const AdminLaporanPenjualan = ({ transactionItem }) => {
-  const [productSoldD, setProductSold] = useState([]);
+  const [productSold, setProductSold] = useState([]);
+  const [totalHargaJual, setTotalHargaJual] = useState(0);
   const productMap = new Map();
 
-  transactionItem.forEach((item) => {
-    const productId = item.Product.id;
-    const productName = item.Product.name;
-    const price = item.Product.price;
-    const totalQuantity = parseInt(item.totalQuantity);
-    if (productMap.has(productId)) {
-        // Jika produk sudah ada di Map, tambahkan jumlah quantity
+  console.log(transactionItem);
+
+  useEffect(() => {
+    setTotalHargaJual(0);
+    transactionItem.forEach((item) => {
+      const productId = item.Product.id;
+      const productName = item.Product.name;
+      const price = item.Product.harga_produk;
+      const totalQuantity = parseInt(item.totalQuantity);
+
+      if (productMap.has(productId)) {
         const existingItem = productMap.get(productId);
         existingItem.totalQuantity += totalQuantity;
         existingItem.totalPrice += totalQuantity * price;
-    } else {
-        // Jika produk belum ada di Map, tambahkan sebagai entri baru
+      } else {
         productMap.set(productId, {
-            Product: { id: productId, name: productName, price: price },
-            totalQuantity: totalQuantity,
-            totalPrice: totalQuantity * price,
+          Product: { id: productId, name: productName, price: price },
+          totalQuantity: totalQuantity,
+          totalPrice: +totalQuantity * +price,
         });
-    }
-});
-
-  console.log(transactionItem);
+      }
+      setTotalHargaJual((prevTotalHargaJual) => prevTotalHargaJual + totalQuantity * price);
+      console.log(totalHargaJual);
+    });
+    setProductSold(Array.from(productMap.values()));
+  }, [transactionItem]);
 
   return (
     <TableContainer>
@@ -38,27 +44,18 @@ const AdminLaporanPenjualan = ({ transactionItem }) => {
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
-          </Tr>
-          <Tr>
-            <Td>feet</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
-          </Tr>
-          <Tr>
-            <Td>yards</Td>
-            <Td>metres (m)</Td>
-            <Td>0.91444</Td>
-          </Tr>
+          {productSold.map((item) => (
+            <Tr key={item.Product.id}>
+              <Td>{item.Product.name}</Td>
+              <Td>{item.totalQuantity}</Td>
+              <Td>{item.totalPrice}</Td>
+            </Tr>
+          ))}
         </Tbody>
         <Tfoot>
           <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
+            <Th colSpan={2}>Total</Th>
+            <Th>{totalHargaJual}</Th>
           </Tr>
         </Tfoot>
       </Table>

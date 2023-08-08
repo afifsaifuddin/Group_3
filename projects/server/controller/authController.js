@@ -107,9 +107,10 @@ const authController = {
     try {
       const salt = await bcrypt.genSalt(10);
       const Hashpassword = await bcrypt.hash(password, salt);
-      await user.update({ password: Hashpassword }, { where: { id } });
-
-      return res.status(200).json({ message: "Password berhasil diubah" });
+      db.sequelize.transaction(async (t) => {
+        await user.update({ password: Hashpassword }, { where: { id } }, { transaction: t });
+        return res.status(200).json({ message: "Password berhasil diubah" });
+      });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -121,27 +122,19 @@ const authController = {
       if (password !== confirmpassword) {
         return res.status(400).json({ error: "Password tidak sama" });
       }
-      console.log(1);
       if (!username || !email || !password || !confirmpassword) {
         return res.status(400).json({ error: "Data tidak lengkap" });
       }
-      console.log(username, email);
-
       const cekUser = await user.findOne({ where: { [Sequelize.Op.or]: [{ username }, { email }] } });
       if (cekUser) return res.status(400).json({ message: "user atau email sudah terdaftar" });
 
-      console.log(3);
-
       const salt = await bcrypt.genSalt(10);
       password = await bcrypt.hash(password, salt);
-      const createkasir = await user.create({
-        username,
-        email,
-        password,
-        confirmpassword,
+      db.sequelize.transaction(async (t) => {
+        const createkasir = await user.create({ username, email, password, confirmpassword }, { transaction: t });
+        await kirimEmailRegister(email, username);
+        return res.status(200).json({ message: "register berhasil", createkasir });
       });
-      await kirimEmailRegister(email, username);
-      return res.status(200).json({ message: "register berhasil", createkasir });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -172,9 +165,10 @@ const authController = {
           if (err) return res.status(500).json({ message: err.message });
         });
       }
-      await user.update({ imgProfile: req.file.path }, { where: { id } });
-
-      res.status(200).json({ message: "Ganti foto profil berhasil" });
+      db.sequelize.transaction(async (t) => {
+        await user.update({ imgProfile: req.file.path }, { where: { id } }, { transaction: t });
+        res.status(200).json({ message: "Ganti foto profil berhasil" });
+      });
     } catch (err) {
       res.status(500).json({ message: "ada yang salah" });
     }

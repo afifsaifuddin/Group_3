@@ -50,9 +50,6 @@ const AdminLaporan = () => {
           <Box ml={4} p={2} borderRadius={"full"} outline={"1px solid red"}>
             <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
           </Box>
-          <Button ml={4} colorScheme="red">
-            Search
-          </Button>
         </Flex>
         <AdminLaporanPenjualan transactionItem={transactionItem} />
       </Box>

@@ -48,8 +48,10 @@ const transactionController = {
   create: async (req, res) => {
     const { id } = req.user;
     try {
-      const result = await transaction.create({ userId: id, totalPrice: req.body.totalharga });
-      return res.status(200).json({ message: "success", result });
+      db.sequelize.transaction(async (t) => {
+        const result = await transaction.create({ userId: id, totalPrice: req.body.totalharga }, { transaction: t });
+        return res.status(200).json({ message: "success", result });
+      });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -59,18 +61,20 @@ const transactionController = {
     const { transactionId, item } = req.body;
     console.log(transactionId, item);
     try {
-      const result = await transactionItem.create({
-        transactionId,
-        productId: item.id,
-        quantity: item.quantity,
-        price: item.harga_produk,
+      db.sequelize.transaction(async (t) => {
+        const result = await transactionItem.create({
+          transactionId,
+          productId: item.id,
+          quantity: item.quantity,
+          price: item.harga_produk,
+        });
+        const itemTransaction = await product.findByPk(item.id);
+        await itemTransaction.decrement("quantity", { by: item.quantity });
+        if (itemTransaction.quantity - item.quantity <= 0) {
+          await itemTransaction.update({ isActive: false }, { transaction: t });
+        }
+        return res.status(200).json({ message: "success", result });
       });
-      const itemTransaction = await product.findByPk(item.id);
-      await itemTransaction.decrement("quantity", { by: item.quantity });
-      if (itemTransaction.quantity - item.quantity <= 0) {
-        await itemTransaction.update({ isActive: false });
-      }
-      return res.status(200).json({ message: "success", result });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -83,7 +87,7 @@ const transactionController = {
       const result = await transaction.findAll({
         where: {
           createdAt: {
-            [Op.between]: [new Date(startDate), new Date(endDate)],
+            [Op.between]: [new Date(startDate), new Date(endDate).setHours(23, 59, 59)],
           },
         },
         attributes: [
@@ -103,18 +107,18 @@ const transactionController = {
   transactionItemDate: async (req, res) => {
     try {
       const { startDate, endDate } = req.query;
+
       const result = await transactionItem.findAll({
         include: [
           {
             model: transaction,
-            where: { createdAt: { [Op.between]: [new Date(startDate), new Date(endDate)] } },
+            where: { createdAt: { [Op.between]: [new Date(startDate), new Date(endDate).setHours(23, 59, 59)] } },
           },
           { model: product },
         ],
         attributes: ["productId", [sequelize.fn("sum", sequelize.col("transactionitem.quantity")), "totalQuantity"]],
         group: ["productId", "Transaction.id"],
       });
-
       return res.status(200).json({ message: "success", result });
     } catch (error) {
       console.log(error);
