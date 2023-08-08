@@ -18,6 +18,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { createProduct, getProduk } from "../redux/reducer/produkreducer";
 import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 export const AdminCreateproduct = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,6 +45,34 @@ export const AdminCreateproduct = () => {
     await dispatch(getProduk({}));
     onClose();
   };
+  const createProductSchema = Yup.object().shape({
+    name: Yup.string().required("Nama harus diisi"),
+    description: Yup.string().required("Deskripsi harus diisi"),
+    categoryId: Yup.string().required("Kategori harus diisi"),
+    modal_produk: Yup.string().required("Modal harus diisi"),
+    harga_produk: Yup.string().required("Harga harus diisi"),
+    quantity: Yup.string().required("Quantity harus diisi"),
+  });
+  //   const formik = useFormik({
+  //       initialValues: {
+  //         name: "",
+  //         description: "",
+  //         categoryId: "",
+  //         modal_produk: "",
+  //         harga_produk: "",
+  //         quantity: "",
+  //       },
+  //       validationSchema: createProductSchema,
+  //       onSubmit: async (values) => {
+  //         try {
+  //           await dispatch(createProduct(values));
+  //           await dispatch(getProduk({}));
+  //           onClose();
+  //         } catch (error) {
+  //           console.log(error);
+  //         }
+  //       }
+  //   })
 
   return (
     <Box>
@@ -65,7 +95,13 @@ export const AdminCreateproduct = () => {
                   objectFit={"cover"}
                   overflow={"hidden"}
                 />
-                <Input type="file" id="image" variant={""} onChange={handleImage} alt="Product Image" />
+                <Input
+                  type="file"
+                  id="image"
+                  variant={""}
+                  onChange={handleImage}
+                  alt="Product Image"
+                />
               </Box>
               <Box>
                 <Text fontWeight={"bold"} mb={"10px"}>

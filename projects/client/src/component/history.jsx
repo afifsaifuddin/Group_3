@@ -1,12 +1,9 @@
 import {
   Box,
-  Button,
-  Center,
   Flex,
   Heading,
   Table,
   Tbody,
-  Td,
   Text,
   Tfoot,
   Th,
@@ -15,7 +12,11 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTransaction } from "../redux/reducer/produkreducer";
+import {
+  getTransaction,
+  setTransaction,
+  setPage,
+} from "../redux/reducer/produkreducer"; // Make sure to import specific actions
 import Historyproduk from "./historyproduk";
 import { Pagination } from "./pagination";
 import DatePicker from "react-datepicker";
@@ -24,20 +25,37 @@ import "react-datepicker/dist/react-datepicker.css";
 export const History = () => {
   const [index, setIndex] = useState(1);
   const dispatch = useDispatch();
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
   useEffect(() => {
-    dispatch(getTransaction({ index, selectedDate }));
-  }, [index, selectedDate]);
+    const formattedStartDate = startDate
+      ? startDate.toISOString().split("T")[0]
+      : null;
+    const formattedEndDate = endDate
+      ? endDate.toISOString().split("T")[0]
+      : null;
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setIndex(1); // Reset index when date changes to show the first page of results
+    dispatch(
+      getTransaction({
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+      })
+    );
+  }, [index, startDate, endDate]);
+
+  const handleDateChange = (date, type) => {
+    if (type === "start") {
+      setStartDate(date);
+    } else {
+      setEndDate(date);
+    }
+    setIndex(1);
   };
 
   const { page } = useSelector((state) => state.produkreducer);
   const transaction = useSelector((state) => state.produkreducer.transaction);
-
+  console.log(transaction);
   return (
     <Box mt={"10px"} ml={"20px"}>
       <Box border={"1px"} p={"10px"} mb={"10px"}>
@@ -46,8 +64,19 @@ export const History = () => {
       <Table>
         <Thead>
           <Flex gap={"10px"}>
-            <Text>Set Date</Text>
-            <DatePicker selected={selectedDate} onChange={handleDateChange} placeholderText="Select a date" />
+            <Text>Start Date</Text>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => handleDateChange(date, "start")}
+              placeholderText="Select a date"
+            />
+
+            <Text>End Date</Text>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => handleDateChange(date, "end")}
+              placeholderText="Select a date"
+            />
           </Flex>
 
           <Tr>
@@ -60,9 +89,21 @@ export const History = () => {
           {transaction &&
             transaction
               .filter((item) => {
-                if (!selectedDate) return true;
-                const transactionDate = new Date(item.createdAt); // Use createdAt or transactionDate based on your API response
-                return transactionDate.toDateString() === selectedDate.toDateString();
+                if (!startDate && !endDate) return true;
+
+                const transactionDate = new Date(item.createdAt);
+
+                if (startDate && endDate) {
+                  return (
+                    transactionDate >= startDate && transactionDate <= endDate
+                  );
+                } else if (startDate) {
+                  return transactionDate >= startDate;
+                } else if (endDate) {
+                  return transactionDate <= endDate;
+                }
+
+                return true;
               })
               .map((item) => <Historyproduk key={item.id} item={item} />)}
         </Tbody>
