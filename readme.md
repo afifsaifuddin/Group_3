@@ -1,6 +1,6 @@
 # Purwadhika Final Project Repository
 
-Gifari x Vaya Love Love
+alhamdulillah
 testing first pull request
 This is monorepo contain frontend project using ReactJS and backend project using ExpressJS.
 
