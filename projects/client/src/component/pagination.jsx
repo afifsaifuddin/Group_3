@@ -44,7 +44,7 @@ export const Pagination = ({ page, index, setIndex }) => {
 
   const pageButtons = renderPageButtons();
   return (
-    <Flex justifyContent="center" marginTop="20px">
+    <Flex justifyContent="center" marginTop="10px">
       <Button onClick={handlePreviousPage} bgColor="#FC2947">
         Previous
       </Button>

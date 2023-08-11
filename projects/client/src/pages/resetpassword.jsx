@@ -42,7 +42,7 @@ export const Resetpassword = () => {
     const token = url.pop();
     try {
       const res = await axios.patch(
-        "http://localhost:8000/pos-kasir/reset-password",
+        `${process.env.REACT_APP_API_BASE_URL}/pos-kasir/reset-password`,
         // { password, confirmPassword },
         values,
         {

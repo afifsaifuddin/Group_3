@@ -26,7 +26,7 @@ export const Modalforgotpass = ({ isOpen, onClose }) => {
   const forgotpassword = async (values) => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/pos-kasir/forgot-password",
+        "http://localhost:8000/api/pos-kasir/forgot-password",
         { email: values.email }
       );
       if (res.status === 200) {

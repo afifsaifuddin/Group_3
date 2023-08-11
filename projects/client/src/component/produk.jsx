@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import CardProduk from "./produkCard.";
 import { useDispatch, useSelector } from "react-redux";
 import { getActiveProduk, getProduk } from "../redux/reducer/produkreducer";
-import { getActiveCategoryAll, getCategoryAll } from "../redux/reducer/categoryreducer";
+import {
+  getActiveCategoryAll,
+  getCategoryAll,
+} from "../redux/reducer/categoryreducer";
 import { Pagination } from "./pagination";
 import Searchbar from "./searchbar";
 import ButtonCart from "./buttonCart";
@@ -43,7 +46,8 @@ export const Produk = () => {
             width={"20vw"}
             focusBorderColor="#FC2947"
             name="category"
-            onChange={handleCategory}>
+            onChange={handleCategory}
+          >
             {category.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -55,7 +59,8 @@ export const Produk = () => {
             placeholder="Urutkan Berdasarkan"
             focusBorderColor="#FC2947"
             name="orderBy"
-            onChange={handleOrderBy}>
+            onChange={handleOrderBy}
+          >
             <option value="DESC|harga_produk">Harga Tertinggi</option>
             <option value="ASC|harga_produk">Harga Terendah</option>
             <option value="DESC">A - Z</option>
@@ -69,7 +74,9 @@ export const Produk = () => {
             ))}
           </Flex>
         </Box>
-        <Pagination page={page} index={index} setIndex={setIndex} />
+        <Box mt={"-30px"}>
+          <Pagination page={page} index={index} setIndex={setIndex} />
+        </Box>
       </Stack>
       <ButtonCart />
     </Flex>

@@ -40,7 +40,7 @@ export const Sidebar = () => {
 
   return (
     <Flex height={"100vh"} width={"100%"}>
-      <VStack p={3} gap={"20px"} bg={"#FC2947"} height={"100vh"} width={"6vw"}>
+      <VStack p={3} gap={"20px"} bg={"#FC2947"} height={"120vh"} width={"6vw"}>
         <Button
           onClick={() => setActivePage("home")}
           _hover={{ bgColor: "white" }}
